@@ -2,13 +2,13 @@
 
 #include "ofMain.h"
 
-enum CallbackType
+/*enum CallbackType
 {
 	GROUP,
 	USER,
 	LOGIN,
 	EVENT
-};
+};*/
 
 class PiecemakerGroup
 {
@@ -19,20 +19,20 @@ public:
 };
 
 
-class EventData
+class PiecemakerEventData
 {
 public:
-	EventData(string eventName_)
+	PiecemakerEventData(string eventName_)
 	{
 		eventName = eventName_;
 	}
 	string eventName;
 };
 
-class GroupEventData
+class PiecemakerGroupEventData
 {
 public:
-    GroupEventData(vector<PiecemakerGroup> groups_)
+    PiecemakerGroupEventData(vector<PiecemakerGroup> groups_)
     {
         groups = groups_;
     }
@@ -54,6 +54,7 @@ public:
     string url;
     string apiKey;
     
+#if 0
     template<class eventType, class ListenerClass, typename ListenerMethod>
 	void addListener(eventType type, ListenerClass * listener, ListenerMethod method)
 	{
@@ -76,10 +77,19 @@ public:
         }
 		
 	}
+#endif
+    
+    ofEvent<PiecemakerEventData> eventDispatcher;
+   // ofEvent<PiecemakerGroupEventData> groupEventDispatcher;
+    
     template<class ListenerClass, typename ListenerMethod>
-	void removeListener(ListenerClass * listener, ListenerMethod method)
-	{
-		ofRemoveListener(eventDispatcher, listener, method);
+	void addListener(ListenerClass * listener, ListenerMethod method){
+		ofAddListener(eventDispatcher,listener,method);
+	}
+    
+	template<class ListenerClass, typename ListenerMethod>
+	void removeListener(ListenerClass * listener, ListenerMethod method){
+		ofRemoveListener(eventDispatcher,listener,method);
 	}
     
 #if 0
@@ -112,6 +122,5 @@ public:
     
 private:
     bool ensureApiKey();
-    ofEvent<EventData> eventDispatcher;
-    ofEvent<GroupEventData> groupEventDispatcher;
+    
 };
