@@ -2,15 +2,7 @@
 
 #include "ofMain.h"
 
-enum CallbackType
-{
-	GROUP,
-	USER,
-	LOGIN,
-	EVENT
-};
-
-class PiecemakerGroup
+class Group
 {
 public:
     int id;
@@ -18,28 +10,52 @@ public:
     string text;
 };
 
+class PiecemakerEvent
+{
+public:
+    PiecemakerEvent()
+    {
+        id = -1;
+        utc_timestamp = "";
+        duration = 0;
+        type = "";
+        
+    }
+	int id;
+	string utc_timestamp;
+	long duration;
+	string type;
+	map<int, string> fields;
+
+};
 
 class LoginEventData
 {
 public:
-	LoginEventData(string eventName_)
+	LoginEventData()
 	{
-		eventName = eventName_;
+		response = "";
 	}
-	string eventName;
+	string response;
 };
 
 class GroupEventData
 {
 public:
-    GroupEventData(vector<PiecemakerGroup> groups_)
+    GroupEventData(vector<Group> groups_)
     {
         groups = groups_;
     }
-    vector<PiecemakerGroup> groups;
+    vector<Group> groups;
     
 };
 
+class PiecemakerEventData
+{
+public:
+    PiecemakerEventData();
+    vector<PiecemakerEvent> events;
+};
 
 
 class ofxPiecemaker2
@@ -50,32 +66,20 @@ public:
     void connect(string url_, string apiKey_);
     
     
+    void listEvents(int groupId);
+    
+    
     void listGroups();
+    void createGroup(string groupTitle = "", string groupText = "");
     string url;
     string apiKey;
     
 
-    ofEvent<LoginEventData> eventDispatcher;
-    ofEvent<GroupEventData> groupEventDispatcher;
-
-    
-    template<class ListenerClass, typename ListenerMethod>
-	void addLoginListener(ListenerClass * listener, ListenerMethod method){
-		ofAddListener(eventDispatcher,listener,method);
-	}
-	template<class ListenerClass, typename ListenerMethod>
-	void removeLoginListener(ListenerClass * listener, ListenerMethod method){
-		ofRemoveListener(eventDispatcher,listener,method);
-	}
-    
-    template<class ListenerClass, typename ListenerMethod>
-	void addGroupListener(ListenerClass * listener, ListenerMethod method){
-		ofAddListener(groupEventDispatcher,listener,method);
-	}
-	template<class ListenerClass, typename ListenerMethod>
-	void removeGroupListener(ListenerClass * listener, ListenerMethod method){
-		ofRemoveListener(groupEventDispatcher,listener,method);
-	}
+    ofEvent<LoginEventData> LOGIN;
+    ofEvent<GroupEventData> GROUP;
+    ofEvent<GroupEventData> LIST_GROUP;
+    ofEvent<GroupEventData> CREATE_GROUP;
+    ofEvent<PiecemakerEventData> LIST_EVENTS;
     
 #if 0
     static string getVersion();

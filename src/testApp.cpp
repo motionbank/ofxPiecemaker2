@@ -1,37 +1,80 @@
 #include "testApp.h"
 
 
-void testApp::onListGroups(GroupEventData& eventData)
+void testApp::onListGroups(GroupEventData& e)
 {
-    api.removeGroupListener(this, &testApp::onListGroups);
-    
-    for (size_t i=0; i<eventData.groups.size(); i++)
+    ofRemoveListener(api.LIST_GROUP, this, &testApp::onListGroups);
+    if (e.groups.empty())
     {
-        PiecemakerGroup& group = eventData.groups[i];
-        ofLogVerbose() << group.id;
-        ofLogVerbose() << group.title;
-        ofLogVerbose() << group.text;
-        if (group.id == 1)
+        createGroup();
+    }else
+    {
+        for (size_t i=0; i<e.groups.size(); i++)
         {
-           // api.addGroupListener(this, &testApp::onGroupOneLoaded);
+            Group& group    = e.groups[i];
+            ofLogVerbose() << group.id;
+            ofLogVerbose() << group.title;
+            ofLogVerbose() << group.text;
+            if (group.id == 1)
+            {
+                // api.addGroupListener(this, &testApp::onGroupOneLoaded);
+            }
         }
+
     }
-    
 }
-void testApp::onAPIConnect(LoginEventData& eventData)
+void testApp::onAPIConnect(LoginEventData& e)
 {
-    api.removeLoginListener(this, &testApp::onAPIConnect);
-    ofLogVerbose(__func__) << "eventName: " << eventData.eventName;
-    api.addGroupListener(this, &testApp::onListGroups);
+    ofRemoveListener(api.LOGIN, this, &testApp::onAPIConnect);
+    ofLogVerbose(__func__) << "e.response: " << e.response;
+    
+    ofAddListener(api.LIST_GROUP, this, &testApp::onListGroups);
     api.listGroups();
 }
 
 //--------------------------------------------------------------
 void testApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
-    api.addLoginListener(this, &testApp::onAPIConnect);
+    
+    ofAddListener(api.LOGIN, this, &testApp::onAPIConnect);
     api.connect("http://piecemaker2-test.herokuapp.com", "0310XMMFx35tqryp");
 }
+
+void testApp::onListEvents(PiecemakerEventData& e)
+{
+    ofRemoveListener(api.LIST_EVENTS, this, &testApp::onListEvents);
+    if(!e.events.empty())
+    {
+        for (size_t i=0; i<e.events.size(); i++)
+        {
+            PiecemakerEvent& event    = e.events[i];
+            ofLogVerbose() << "utc_timestamp: "     << event.utc_timestamp;
+            ofLogVerbose() << "duration "           << event.duration;
+            ofLogVerbose() << "type: "              << event.type;
+            ofLogVerbose() << "fields.size: "       << event.fields.size();
+        }
+    }
+    
+}
+
+void testApp::onGroupCreated(GroupEventData& e)
+{
+    ofRemoveListener(api.CREATE_GROUP, this, &testApp::onGroupCreated);
+    if (!e.groups.empty())
+    {
+        ofLogVerbose(__func__) << e.groups[0].title << " CREATED";
+        ofAddListener(api.LIST_EVENTS, this, &testApp::onListEvents);
+        api.listEvents( e.groups[0].id );
+    }
+    
+}
+
+void testApp::createGroup()
+{
+    ofAddListener(api.CREATE_GROUP, this, &testApp::onGroupCreated);
+    api.createGroup( "Fancy title", "Fancy text");
+}
+
 
 //--------------------------------------------------------------
 void testApp::update(){
