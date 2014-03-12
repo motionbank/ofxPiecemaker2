@@ -24,7 +24,7 @@ void ofxPiecemaker2::connect(string url_, string apiKey_)
 {
     this->url = url_;
     this->apiKey = apiKey_;
-    EventData eventData("hello");
+    LoginEventData eventData("hello");
     ofNotifyEvent(eventDispatcher, eventData);
 }
 

@@ -11,7 +11,7 @@ class testApp : public ofBaseApp{
 		void draw();
 		
         ofxPiecemaker2 api;
-        void onAPIConnect(EventData& eventData);
+        void onAPIConnect(LoginEventData& eventData);
         void onListGroups(GroupEventData& eventData);
     
 		void keyPressed(int key);
