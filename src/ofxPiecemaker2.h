@@ -2,13 +2,13 @@
 
 #include "ofMain.h"
 
-/*enum CallbackType
+enum CallbackType
 {
 	GROUP,
 	USER,
 	LOGIN,
 	EVENT
-};*/
+};
 
 class PiecemakerGroup
 {
@@ -19,20 +19,20 @@ public:
 };
 
 
-class PiecemakerEventData
+class LoginEventData
 {
 public:
-	PiecemakerEventData(string eventName_)
+	LoginEventData(string eventName_)
 	{
 		eventName = eventName_;
 	}
 	string eventName;
 };
 
-class PiecemakerGroupEventData
+class GroupEventData
 {
 public:
-    PiecemakerGroupEventData(vector<PiecemakerGroup> groups_)
+    GroupEventData(vector<PiecemakerGroup> groups_)
     {
         groups = groups_;
     }
@@ -54,42 +54,27 @@ public:
     string url;
     string apiKey;
     
-#if 0
-    template<class eventType, class ListenerClass, typename ListenerMethod>
-	void addListener(eventType type, ListenerClass * listener, ListenerMethod method)
-	{
-        switch (type)
-        {
-            case LOGIN:
-            {
-                ofAddListener(eventDispatcher, listener, method);
-                break;
-            }
-            case GROUP:
-            {
-                ofAddListener(groupEventDispatcher, listener, method);
-                break;
-            }
-            default:
-            {
-                ofLogError() << "UNKNOWN TYPE";
-            }
-        }
-		
-	}
-#endif
-    
-    ofEvent<PiecemakerEventData> eventDispatcher;
-   // ofEvent<PiecemakerGroupEventData> groupEventDispatcher;
+
+    ofEvent<LoginEventData> eventDispatcher;
+    ofEvent<GroupEventData> groupEventDispatcher;
+
     
     template<class ListenerClass, typename ListenerMethod>
-	void addListener(ListenerClass * listener, ListenerMethod method){
+	void addLoginListener(ListenerClass * listener, ListenerMethod method){
 		ofAddListener(eventDispatcher,listener,method);
 	}
-    
 	template<class ListenerClass, typename ListenerMethod>
-	void removeListener(ListenerClass * listener, ListenerMethod method){
+	void removeLoginListener(ListenerClass * listener, ListenerMethod method){
 		ofRemoveListener(eventDispatcher,listener,method);
+	}
+    
+    template<class ListenerClass, typename ListenerMethod>
+	void addGroupListener(ListenerClass * listener, ListenerMethod method){
+		ofAddListener(groupEventDispatcher,listener,method);
+	}
+	template<class ListenerClass, typename ListenerMethod>
+	void removeGroupListener(ListenerClass * listener, ListenerMethod method){
+		ofRemoveListener(groupEventDispatcher,listener,method);
 	}
     
 #if 0

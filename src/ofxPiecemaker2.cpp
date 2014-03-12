@@ -24,7 +24,7 @@ void ofxPiecemaker2::connect(string url_, string apiKey_)
 {
     this->url = url_;
     this->apiKey = apiKey_;
-    PiecemakerEventData eventData("hello");
+    LoginEventData eventData("hello");
     ofNotifyEvent(eventDispatcher, eventData);
 }
 
@@ -45,9 +45,9 @@ void ofxPiecemaker2::listGroups()
         testGroup.text = "testGroup text " + ofToString(i);
         groups.push_back(testGroup);
     }
-    PiecemakerGroupEventData eventData(groups);
+    GroupEventData eventData(groups);
     eventData.groups = groups;
-    //ofNotifyEvent(groupEventDispatcher, eventData);
+    ofNotifyEvent(groupEventDispatcher, eventData);
 }
 
 #pragma private functions
