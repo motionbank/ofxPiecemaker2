@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0345B73A18D0F27F005233FA /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73118D0F27F005233FA /* json_reader.cpp */; };
+		0345B73B18D0F27F005233FA /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73318D0F27F005233FA /* json_value.cpp */; };
+		0345B73C18D0F27F005233FA /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73518D0F27F005233FA /* json_writer.cpp */; };
+		0345B73D18D0F27F005233FA /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73818D0F27F005233FA /* ofxJSONElement.cpp */; };
+		034E654318D0DB0100840D52 /* ofxHttpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 034E654118D0DB0100840D52 /* ofxHttpUtils.cpp */; };
 		03A8B70018CE71280028E9B1 /* ofxPiecemaker2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A8B6FE18CE71280028E9B1 /* ofxPiecemaker2.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
@@ -61,6 +66,33 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0345B72518D0F27F005233FA /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		0345B72618D0F27F005233FA /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		0345B72718D0F27F005233FA /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
+		0345B72818D0F27F005233FA /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forwards.h; sourceTree = "<group>"; };
+		0345B72918D0F27F005233FA /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		0345B72A18D0F27F005233FA /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		0345B72B18D0F27F005233FA /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value.h; sourceTree = "<group>"; };
+		0345B72C18D0F27F005233FA /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		0345B72E18D0F27F005233FA /* json_batchallocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_batchallocator.h; sourceTree = "<group>"; };
+		0345B72F18D0F27F005233FA /* json_internalarray.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalarray.inl; sourceTree = "<group>"; };
+		0345B73018D0F27F005233FA /* json_internalmap.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_internalmap.inl; sourceTree = "<group>"; };
+		0345B73118D0F27F005233FA /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_reader.cpp; sourceTree = "<group>"; };
+		0345B73218D0F27F005233FA /* json_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json_tool.h; sourceTree = "<group>"; };
+		0345B73318D0F27F005233FA /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_value.cpp; sourceTree = "<group>"; };
+		0345B73418D0F27F005233FA /* json_valueiterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json_valueiterator.inl; sourceTree = "<group>"; };
+		0345B73518D0F27F005233FA /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
+		0345B73618D0F27F005233FA /* sconscript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sconscript; sourceTree = "<group>"; };
+		0345B73818D0F27F005233FA /* ofxJSONElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxJSONElement.cpp; sourceTree = "<group>"; };
+		0345B73918D0F27F005233FA /* ofxJSONElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxJSONElement.h; sourceTree = "<group>"; };
+		034E654018D0DB0100840D52 /* ofxHttpTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHttpTypes.h; sourceTree = "<group>"; };
+		034E654118D0DB0100840D52 /* ofxHttpUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxHttpUtils.cpp; sourceTree = "<group>"; };
+		034E654218D0DB0100840D52 /* ofxHttpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxHttpUtils.h; sourceTree = "<group>"; };
+		034E654818D0DB6B00840D52 /* ofw-logo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "ofw-logo.gif"; sourceTree = "<group>"; };
+		034E654A18D0DB6B00840D52 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		034E654B18D0DB6B00840D52 /* testApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testApp.cpp; sourceTree = "<group>"; };
+		034E654C18D0DB6B00840D52 /* testApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
+		034E654D18D0DB6B00840D52 /* upload.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = upload.php; sourceTree = "<group>"; };
 		03A8B6FE18CE71280028E9B1 /* ofxPiecemaker2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPiecemaker2.cpp; sourceTree = "<group>"; };
 		03A8B6FF18CE71280028E9B1 /* ofxPiecemaker2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPiecemaker2.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
@@ -117,9 +149,144 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0345B72018D0F273005233FA /* ofxJSON */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72118D0F27F005233FA /* libs */,
+				0345B73718D0F27F005233FA /* src */,
+			);
+			name = ofxJSON;
+			sourceTree = "<group>";
+		};
+		0345B72118D0F27F005233FA /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72218D0F27F005233FA /* jsoncpp */,
+			);
+			name = libs;
+			path = addons/ofxJSON/libs;
+			sourceTree = "<group>";
+		};
+		0345B72218D0F27F005233FA /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72318D0F27F005233FA /* include */,
+				0345B72D18D0F27F005233FA /* src */,
+			);
+			path = jsoncpp;
+			sourceTree = "<group>";
+		};
+		0345B72318D0F27F005233FA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72418D0F27F005233FA /* json */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		0345B72418D0F27F005233FA /* json */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72518D0F27F005233FA /* autolink.h */,
+				0345B72618D0F27F005233FA /* config.h */,
+				0345B72718D0F27F005233FA /* features.h */,
+				0345B72818D0F27F005233FA /* forwards.h */,
+				0345B72918D0F27F005233FA /* json.h */,
+				0345B72A18D0F27F005233FA /* reader.h */,
+				0345B72B18D0F27F005233FA /* value.h */,
+				0345B72C18D0F27F005233FA /* writer.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		0345B72D18D0F27F005233FA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0345B72E18D0F27F005233FA /* json_batchallocator.h */,
+				0345B72F18D0F27F005233FA /* json_internalarray.inl */,
+				0345B73018D0F27F005233FA /* json_internalmap.inl */,
+				0345B73118D0F27F005233FA /* json_reader.cpp */,
+				0345B73218D0F27F005233FA /* json_tool.h */,
+				0345B73318D0F27F005233FA /* json_value.cpp */,
+				0345B73418D0F27F005233FA /* json_valueiterator.inl */,
+				0345B73518D0F27F005233FA /* json_writer.cpp */,
+				0345B73618D0F27F005233FA /* sconscript */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		0345B73718D0F27F005233FA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0345B73818D0F27F005233FA /* ofxJSONElement.cpp */,
+				0345B73918D0F27F005233FA /* ofxJSONElement.h */,
+			);
+			name = src;
+			path = addons/ofxJSON/src;
+			sourceTree = "<group>";
+		};
+		034E653F18D0DB0100840D52 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				034E654018D0DB0100840D52 /* ofxHttpTypes.h */,
+				034E654118D0DB0100840D52 /* ofxHttpUtils.cpp */,
+				034E654218D0DB0100840D52 /* ofxHttpUtils.h */,
+			);
+			name = src;
+			path = addons/ofxHttpUtils/src;
+			sourceTree = "<group>";
+		};
+		034E654418D0DB1000840D52 /* ofxHttpUtils */ = {
+			isa = PBXGroup;
+			children = (
+				034E654518D0DB6B00840D52 /* example */,
+				034E653F18D0DB0100840D52 /* src */,
+			);
+			name = ofxHttpUtils;
+			sourceTree = "<group>";
+		};
+		034E654518D0DB6B00840D52 /* example */ = {
+			isa = PBXGroup;
+			children = (
+				034E654618D0DB6B00840D52 /* bin */,
+				034E654918D0DB6B00840D52 /* src */,
+				034E654D18D0DB6B00840D52 /* upload.php */,
+			);
+			name = example;
+			path = addons/ofxHttpUtils/example;
+			sourceTree = "<group>";
+		};
+		034E654618D0DB6B00840D52 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				034E654718D0DB6B00840D52 /* data */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		034E654718D0DB6B00840D52 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				034E654818D0DB6B00840D52 /* ofw-logo.gif */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		034E654918D0DB6B00840D52 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				034E654A18D0DB6B00840D52 /* main.cpp */,
+				034E654B18D0DB6B00840D52 /* testApp.cpp */,
+				034E654C18D0DB6B00840D52 /* testApp.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				0345B72018D0F273005233FA /* ofxJSON */,
+				034E654418D0DB1000840D52 /* ofxHttpUtils */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -233,7 +400,7 @@
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "PieceMaker2Api" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -292,9 +459,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0345B73A18D0F27F005233FA /* json_reader.cpp in Sources */,
+				0345B73B18D0F27F005233FA /* json_value.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				03A8B70018CE71280028E9B1 /* ofxPiecemaker2.cpp in Sources */,
+				0345B73D18D0F27F005233FA /* ofxJSONElement.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
+				034E654318D0DB0100840D52 /* ofxHttpUtils.cpp in Sources */,
+				0345B73C18D0F27F005233FA /* json_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,7 +485,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -334,6 +506,7 @@
 					src,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
@@ -347,7 +520,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -369,6 +542,7 @@
 					src,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",

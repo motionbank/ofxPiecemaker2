@@ -20,6 +20,13 @@ apps/*
 # also, see examples/.gitignore
 
 #########################
+# external git
+#########################
+
+addons/ofxHttpUtils
+addons/ofxJSON
+
+#########################
 # general
 #########################
 

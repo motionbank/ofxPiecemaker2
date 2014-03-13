@@ -14,7 +14,7 @@ class testApp : public ofBaseApp{
         void onAPIConnect(LoginEventData& e);
         void onListGroups(GroupEventData& e);
     
-    
+    void listEventsForGroup(int groupId);
         void onListEvents(PiecemakerEventData& e);
         void onGroupCreated(GroupEventData& e);
         void createGroup();

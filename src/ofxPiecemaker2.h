@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 
+#include "ofxHttpUtils.h"
+#include "ofxJSONElement.h"
+
 class Group
 {
 public:
@@ -16,12 +19,16 @@ public:
     PiecemakerEvent()
     {
         id = -1;
+        title = "";
+        event_group_id = -1;
         utc_timestamp = "";
         duration = 0;
         type = "";
         
     }
 	int id;
+    int event_group_id;
+    string title;
 	string utc_timestamp;
 	long duration;
 	string type;
@@ -34,9 +41,23 @@ class LoginEventData
 public:
 	LoginEventData()
 	{
-		response = "";
+		successful = false;
 	}
-	string response;
+    bool wasSuccessful()
+    {
+        return successful;
+    }
+    void setResponse(ofxHttpResponse response_)
+    {
+        this->response = response_;
+        if(response.status <300 && response.status>=200)
+        {
+            successful = true;
+        }
+    }
+private:
+	ofxHttpResponse response;
+    bool successful;
 };
 
 class GroupEventData
@@ -53,7 +74,10 @@ public:
 class PiecemakerEventData
 {
 public:
-    PiecemakerEventData();
+    PiecemakerEventData()
+    {
+    
+    };
     vector<PiecemakerEvent> events;
 };
 
@@ -64,7 +88,8 @@ public:
     ofxPiecemaker2();
     void setup();
     void connect(string url_, string apiKey_);
-    
+    void login(string userEmail, string userPassword);
+    void whoAmI();
     
     void listEvents(int groupId);
     
@@ -81,13 +106,14 @@ public:
     ofEvent<GroupEventData> CREATE_GROUP;
     ofEvent<PiecemakerEventData> LIST_EVENTS;
     
+    string printResponse(ofxHttpResponse response);
 #if 0
     static string getVersion();
     void printVersion();
-    void login(string userEmail, string userPassword);
+    
     void logout();
     void listUsers();
-    void whoAmI();
+    
     void createUser(string userName, string userEmail, string userPassword, string userToken);
     void getUser(int userId);
     void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
@@ -111,5 +137,11 @@ public:
     
 private:
     bool ensureApiKey();
+    ofxHttpUtils httpUtils;
+    void onHTTPResponse(ofxHttpResponse& response);
     
+    void onLoginResponse(ofxHttpResponse& response);
+    void onListGroupsResponse(ofxHttpResponse& response);
+    void onListEventsResponse(ofxHttpResponse& response);
+    void onWhoAmIResponse(ofxHttpResponse& response);
 };

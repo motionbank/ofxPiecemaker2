@@ -1,7 +1,6 @@
 #include "ofMain.h"
 #include "testApp.h"
 
-#define __func__ __FUNCTION__
 //========================================================================
 int main( ){
 
