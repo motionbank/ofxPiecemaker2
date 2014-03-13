@@ -8,9 +8,15 @@
 class Group
 {
 public:
+    Group()
+    {
+    
+    }
     int id;
     string title;
     string text;
+    string created_at;
+    int created_by_user_id;
 };
 
 class PiecemakerEvent

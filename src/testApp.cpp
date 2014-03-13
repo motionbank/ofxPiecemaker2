@@ -31,24 +31,21 @@ void testApp::onAPIConnect(LoginEventData& e)
 
 void testApp::onListGroups(GroupEventData& e)
 {
+    ofLogVerbose(__func__) << "groups.size(): " << e.groups.size();
     ofRemoveListener(api.LIST_GROUP, this, &testApp::onListGroups);
     if (e.groups.empty())
     {
        // createGroup();
     }else
     {
-       /* for (size_t i=0; i<e.groups.size(); i++)
+        for (size_t i=0; i<e.groups.size(); i++)
         {
             Group& group    = e.groups[i];
             ofLogVerbose(__func__) << "group.id: " << group.id;
             ofLogVerbose(__func__) << "group.title: " << group.title;
             ofLogVerbose(__func__) << "group.text: " << group.text;
-            if (group.id == 1)
-            {
-                // api.addGroupListener(this, &testApp::onGroupOneLoaded);
-            }
-        }*/
-        
+            listEventsForGroup(group.id);
+        }        
     }
 }
 
@@ -64,11 +61,7 @@ void testApp::onGroupCreated(GroupEventData& e)
     if (!e.groups.empty())
     {
         
-        for (size_t i=0; i<e.groups.size(); i++)
-        {
-            ofLogVerbose(__func__) << "e.groups[i].title: " << e.groups[i].title;
-            listEventsForGroup(e.groups[i].id);
-        }
+        
         
     }
     
@@ -82,6 +75,7 @@ void testApp::listEventsForGroup(int groupId)
 
 void testApp::onListEvents(PiecemakerEventData& e)
 {
+    ofLogVerbose(__func__) << "events.size(): " << e.events.size();
     ofRemoveListener(api.LIST_EVENTS, this, &testApp::onListEvents);
     if(!e.events.empty())
     {
