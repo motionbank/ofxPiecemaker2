@@ -51,7 +51,7 @@ void ofxPiecemaker2::onLoginResponse(ofxHttpResponse& response)
     
     this->apiKey = parser["api_access_key"].asString();
     
-    whoAmI();
+    //whoAmI();
     LoginEventData eventData;
     eventData.setResponse(response);
     ofNotifyEvent(LOGIN, eventData);
@@ -67,6 +67,7 @@ void ofxPiecemaker2::login(string userEmail, string userPassword)
     form.addFormField( "email",    userEmail );
     form.addFormField( "password", userPassword );
 	httpUtils.addForm(form);
+    httpUtils.start();
 
 }
 void ofxPiecemaker2::connect(string url_, string apiKey_)
@@ -75,7 +76,7 @@ void ofxPiecemaker2::connect(string url_, string apiKey_)
     this->apiKey = apiKey_;
     //ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onHTTPResponse);
     
-	httpUtils.start();
+	
     
     
     /**/
@@ -84,6 +85,7 @@ void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 {
     ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onWhoAmIResponse);
     ofLogVerbose(__func__) << printResponse(response);
+    
 }
 void ofxPiecemaker2::whoAmI()
 {
@@ -121,46 +123,32 @@ void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
     ofLogVerbose(__func__) << printResponse(response);
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
-#if 0
+
     PiecemakerEventData eventData;
     vector<PiecemakerEvent> events;
     if(parser.isArray())
     {
         ofLogVerbose(__func__) << "isArray(): " << parser.isArray() << " size " << parser.size();
-        for(size_t i= 0; i<parser.size(); i++)
+        for(int i= 0; i<parser.size(); i++)
         {
             PiecemakerEvent event;
+            Json::Value jsonEvent = parser[i]["event"];
+            ofLogVerbose() << "isObject : " << jsonEvent.isObject();
             
-            event.id = parser["id"].asInt();
-            event.title = parser["title"].asString();
-            event.event_group_id = parser["event_group_id"].asInt();
-            event.utc_timestamp = parser["created_at"].asString();
-            event.duration = i*ofRandom(50);
-            event. type = "UNDEFINED";
-            event.fields[i] = ofToString("STRING VALUE" + ofToString(i));
-            map<int, string> fields;
+            event.id = jsonEvent["id"].asInt();
+            event.title = jsonEvent["title"].asString();
+            event.event_group_id = jsonEvent["event_group_id"].asInt();
+            event.utc_timestamp = jsonEvent["created_at"].asString();
+            event.duration = jsonEvent["duration"].asInt();
+            event. type = jsonEvent["type"].asString();
+           // event.fields[i] = ofToString("STRING VALUE" + ofToString(i));
+            //map<int, string> fields;
             events.push_back(event);
         }
     }
-    "id":11,"title":"Test group","text":"... with a fancy description","created_at":"2013-12-19 15:23:19 +0000","created_by_user_id":3
-    ofLogVerbose(__func__) << "isObject(): " << parser.isObject();
-#endif
-    // ofLogVerbose(__func__) << "location: " << response.location;
-    /*response.status; 				// return code for the response ie: 200 = OK
-     response.reasonForStatus;		// text explaining the status
-     ofBuffer responseBody;		// the actual response
-     response.contentType;			// the mime type of the response
-     Poco::Timestamp timestamp;		// time of the response
-     response.url;
-     vector<Poco::Net::HTTPCookie> cookies;
-     response.location;*/
-    
-    //httpUtils.stop();
-    /*
-   
     
     eventData.events = events;
-    ofNotifyEvent(LIST_EVENTS, eventData);*/
+    ofNotifyEvent(LIST_EVENTS, eventData);
     
 }
 
@@ -197,14 +185,7 @@ void ofxPiecemaker2::listGroups()
     ofLogVerbose(__func__) << " END";
     /*
     
-    for(size_t i= 0; i<5; i++)
-    {
-        Group testGroup;
-        testGroup.id = i;
-        testGroup.title = "testGroup title " + ofToString(i);
-        testGroup.text = "testGroup text " + ofToString(i);
-        groups.push_back(testGroup);
-    }*/
+    f*/
     
 }
 
@@ -215,24 +196,38 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
     ofLogVerbose(__func__) << "reasonForStatus: " << response.reasonForStatus;
     ofLogVerbose(__func__) << "contentType: " << response.contentType;
     ofLogVerbose(__func__) << "responseBody: " << response.responseBody; //e.g {"api_access_key":"0310XLHGylURCquA"}
-    ofxJSONElement parser;
-    parser.parse(ofToString(response.responseBody));
-    /*
-    string id = parser["id"].asString();
-    string title = parser["title"].asString();
-    string text = parser["text"].asString();
-    string created_at = parser["created_at"].asString();
-    string created_by_user_id = parser["created_by_user_id"].asString();*/
-        string timeFormat = "%Y-%m-%d-%H-%M-%S-%i";
-    string timestampString = Poco::DateTimeFormatter::format(response.timestamp, timeFormat);
-    ofLogVerbose(__func__) << "timestamp: " << timestampString;
     
     vector<Group> groups;
-    /*  "id": 11,
-     "title": "Test group",
-     "text": "... with a fancy description",
-     "created_at": "2013-12-19 15:23:19 +0000",
-     "created_by_user_id": 3*/
+    
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+   /* for( Json::ValueIterator itr = parser.begin() ; itr != parser.end() ; itr++ )
+    {
+        PrintJSONTree( itr.key(), depth+1 );
+    }*/
+    if(parser.isArray())
+    {
+        ofLogVerbose(__func__) << "MULTIPLE ELEMENTS: " << parser.size();
+        
+        for(int i= 0; i<parser.size(); i++)
+        {
+            Group group;
+            
+            group.id = parser[i]["id"].asInt();
+            group.title = parser[i]["title"].asString();
+            group.text = parser[i]["text"].asString();
+            group.created_at = parser[i]["created_at"].asString();
+            group.created_by_user_id = parser[i]["created_by_user_id"].asInt();
+            groups.push_back(group);
+        }
+        
+    }
+    
+    
+    //timeFormat = "%Y-%m-%d-%H-%M-%S-%i";
+   // string timestampString = Poco::DateTimeFormatter::format(response.timestamp, timeFormat);
+   // ofLogVerbose(__func__) << "timestamp: " << timestampString;
+    
     GroupEventData eventData(groups);
     eventData.groups = groups;
     ofNotifyEvent(LIST_GROUP, eventData);
