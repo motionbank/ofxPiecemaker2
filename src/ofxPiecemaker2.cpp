@@ -11,8 +11,6 @@
 #include "ofxPiecemaker2.h"
 #include "Poco/DateTimeFormatter.h"
 
-
-
 string ofxPiecemaker2::printResponse(ofxHttpResponse response)
 {
     stringstream responseString;
@@ -31,27 +29,24 @@ string ofxPiecemaker2::printResponse(ofxHttpResponse response)
 ofxPiecemaker2::ofxPiecemaker2()
 {
     apiKey = "";
+    url = "";
+    httpUtils.start();
 }
 
-void ofxPiecemaker2::setup()
+void ofxPiecemaker2::setup(string url_)
 {
-
-}
-void ofxPiecemaker2::onHTTPResponse(ofxHttpResponse& response)
-{
-    ofLogVerbose(__func__) << printResponse(response);
+    this->url = url_;
 }
 
 void ofxPiecemaker2::onLoginResponse(ofxHttpResponse& response)
 {
     ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onLoginResponse);
-     ofLogVerbose(__func__) << printResponse(response);
+    ofLogVerbose(__func__) << printResponse(response);
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
     
     this->apiKey = parser["api_access_key"].asString();
     
-    //whoAmI();
     LoginEventData eventData;
     eventData.setResponse(response);
     ofNotifyEvent(LOGIN, eventData);
@@ -67,20 +62,10 @@ void ofxPiecemaker2::login(string userEmail, string userPassword)
     form.addFormField( "email",    userEmail );
     form.addFormField( "password", userPassword );
 	httpUtils.addForm(form);
-    httpUtils.start();
+    
 
 }
-void ofxPiecemaker2::connect(string url_, string apiKey_)
-{
-    this->url = url_;
-    this->apiKey = apiKey_;
-    //ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onHTTPResponse);
-    
-	
-    
-    
-    /**/
-}
+
 void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 {
     ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onWhoAmIResponse);
@@ -89,22 +74,17 @@ void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 }
 void ofxPiecemaker2::whoAmI()
 {
-    ofLogVerbose(__func__) << " START";
-    
     ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onWhoAmIResponse);
+    
     ofxHttpForm form;
 	form.action = url + "/user/me";
 	form.method = OFX_HTTP_GET;
     httpUtils.customHeaders["X-Access-Key"] = apiKey;
 	httpUtils.addForm(form);
-    
-    ofLogVerbose(__func__) << " END";
 }
 
 void ofxPiecemaker2::listEvents(int groupId)
 {
-   ofLogVerbose(__func__) << " START";
-    
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onListEventsResponse);
     ofxHttpForm form;
@@ -112,8 +92,6 @@ void ofxPiecemaker2::listEvents(int groupId)
 	form.method = OFX_HTTP_GET;
     httpUtils.customHeaders["X-Access-Key"] = apiKey;
 	httpUtils.addForm(form);
-    ofLogVerbose(__func__) << "form.action: " << form.action;
-    ofLogVerbose(__func__) << " END";
    
 }
 
@@ -152,20 +130,70 @@ void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
     
 }
 
-
-void ofxPiecemaker2::createGroup(string groupTitle, string groupText)
+void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {
-    Group group;
-    group.id = ofRandom(10);
-
-    //TODO Check for empty?
-    group.title = groupTitle;
-    group.text  = groupText;
-    
+    //ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onCreateGroupResponse);
+    ofLogVerbose(__func__) << printResponse(response);
     vector<Group> groups;
-    groups.push_back(group);
     GroupEventData eventData(groups);
     ofNotifyEvent(CREATE_GROUP, eventData);
+}
+
+void ofxPiecemaker2::createGroup(string title, string text)
+{
+    ofLogVerbose(__func__) << title << " " << text;
+    ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onCreateGroupResponse);
+    ofxHttpForm form;
+    //httpUtils.customHeaders["X-Access-Key"] = apiKey;
+	form.action = url + "/group";
+    form.addFormField( "title", title );
+    form.addFormField( "text", text );
+	form.method = OFX_HTTP_POST;
+    
+	httpUtils.addForm(form);
+    
+}
+
+void ofxPiecemaker2::onGetGroupResponse(ofxHttpResponse& response)
+{
+    ofLogVerbose(__func__) << printResponse(response);
+    ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onGetGroupResponse);
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    
+    vector<Group> groups;
+
+    if(parser.isArray())
+    {
+        ofLogVerbose(__func__) << "MULTIPLE ELEMENTS: " << parser.size();
+        
+        for(int i= 0; i<parser.size(); i++)
+        {
+            Group group;
+            
+            group.id = parser[i]["id"].asInt();
+            group.title = parser[i]["title"].asString();
+            group.text = parser[i]["text"].asString();
+            group.created_at = parser[i]["created_at"].asString();
+            group.created_by_user_id = parser[i]["created_by_user_id"].asInt();
+            groups.push_back(group);
+        }
+        
+    }
+    GroupEventData eventData(groups);
+    eventData.groups = groups;
+}
+
+
+void ofxPiecemaker2::getGroup(int groupId)
+{
+    ofLogVerbose(__func__) << "groupId: " << groupId;
+    ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onGetGroupResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId);
+	form.method = OFX_HTTP_GET;
+    httpUtils.customHeaders["X-Access-Key"] = apiKey;
+	httpUtils.addForm(form);
 }
 
 void ofxPiecemaker2::listGroups()
@@ -174,37 +202,28 @@ void ofxPiecemaker2::listGroups()
     {
         return;
     }
-    ofLogVerbose(__func__) << " START";
     ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onListGroupsResponse);
     ofxHttpForm form;
 	form.action = url + "/groups";
 	form.method = OFX_HTTP_GET;
     httpUtils.customHeaders["X-Access-Key"] = apiKey;
 	httpUtils.addForm(form);
-    ofLogVerbose(__func__) << "form.action: " << form.action;
-    ofLogVerbose(__func__) << " END";
-    /*
     
-    f*/
+    ofLogVerbose(__func__) << "form.action: " << form.action;
     
 }
 
 void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
 {
     ofRemoveListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onListGroupsResponse);
-    ofLogVerbose(__func__) << "status: " << response.status;
-    ofLogVerbose(__func__) << "reasonForStatus: " << response.reasonForStatus;
-    ofLogVerbose(__func__) << "contentType: " << response.contentType;
-    ofLogVerbose(__func__) << "responseBody: " << response.responseBody; //e.g {"api_access_key":"0310XLHGylURCquA"}
+    
+    ofLogVerbose(__func__) << printResponse(response);
     
     vector<Group> groups;
     
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
-   /* for( Json::ValueIterator itr = parser.begin() ; itr != parser.end() ; itr++ )
-    {
-        PrintJSONTree( itr.key(), depth+1 );
-    }*/
+    
     if(parser.isArray())
     {
         ofLogVerbose(__func__) << "MULTIPLE ELEMENTS: " << parser.size();
@@ -223,11 +242,6 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
         
     }
     
-    
-    //timeFormat = "%Y-%m-%d-%H-%M-%S-%i";
-   // string timestampString = Poco::DateTimeFormatter::format(response.timestamp, timeFormat);
-   // ofLogVerbose(__func__) << "timestamp: " << timestampString;
-    
     GroupEventData eventData(groups);
     eventData.groups = groups;
     ofNotifyEvent(LIST_GROUP, eventData);
@@ -235,7 +249,7 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
     
 }
 
-#pragma private functions
+#pragma mark private functions
 bool ofxPiecemaker2::ensureApiKey()
 {
     if (!apiKey.empty())

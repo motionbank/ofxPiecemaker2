@@ -14,10 +14,11 @@ class testApp : public ofBaseApp{
         void onAPIConnect(LoginEventData& e);
         void onListGroups(GroupEventData& e);
     
-    void listEventsForGroup(int groupId);
+        void listEventsForGroup(int groupId);
         void onListEvents(PiecemakerEventData& e);
         void onGroupCreated(GroupEventData& e);
-        void createGroup();
+    
+        void createRandomGroups();
     
 		void keyPressed(int key);
 		void keyReleased(int key);
