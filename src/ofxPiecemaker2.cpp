@@ -144,7 +144,7 @@ void ofxPiecemaker2::createGroup(string title, string text)
     ofLogVerbose(__func__) << title << " " << text;
     ofAddListener(httpUtils.newResponseEvent, this, &ofxPiecemaker2::onCreateGroupResponse);
     ofxHttpForm form;
-    //httpUtils.customHeaders["X-Access-Key"] = apiKey;
+    httpUtils.customHeaders["X-Access-Key"] = apiKey;
 	form.action = url + "/group";
     form.addFormField( "title", title );
     form.addFormField( "text", text );
@@ -170,12 +170,7 @@ void ofxPiecemaker2::onGetGroupResponse(ofxHttpResponse& response)
         for(int i= 0; i<parser.size(); i++)
         {
             Group group;
-            
-            group.id = parser[i]["id"].asInt();
-            group.title = parser[i]["title"].asString();
-            group.text = parser[i]["text"].asString();
-            group.created_at = parser[i]["created_at"].asString();
-            group.created_by_user_id = parser[i]["created_by_user_id"].asInt();
+            group.createFromJSON(parser[i]);
             groups.push_back(group);
         }
         
@@ -231,12 +226,7 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
         for(int i= 0; i<parser.size(); i++)
         {
             Group group;
-            
-            group.id = parser[i]["id"].asInt();
-            group.title = parser[i]["title"].asString();
-            group.text = parser[i]["text"].asString();
-            group.created_at = parser[i]["created_at"].asString();
-            group.created_by_user_id = parser[i]["created_by_user_id"].asInt();
+            group.createFromJSON(parser[i]);
             groups.push_back(group);
         }
         

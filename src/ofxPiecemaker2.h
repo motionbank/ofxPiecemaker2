@@ -22,6 +22,15 @@ public:
         
         ofLogVerbose(__func__) << "\n" << info.str();
     };
+    
+    void createFromJSON(Json::Value jsonvalue)
+    {
+            id = jsonvalue["id"].asInt();
+            title = jsonvalue["title"].asString();
+            text = jsonvalue["text"].asString();
+            created_at = jsonvalue["created_at"].asString();
+            created_by_user_id = jsonvalue["created_by_user_id"].asInt();
+    };
     int id;
     string title;
     string text;

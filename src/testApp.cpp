@@ -52,7 +52,6 @@ void testApp::onListGroups(GroupEventData& e)
 }
 static const char alphanum[] =
 "0123456789"
-"!@#$%^&*"
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 "abcdefghijklmnopqrstuvwxyz";
 
