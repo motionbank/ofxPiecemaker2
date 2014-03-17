@@ -14,9 +14,11 @@ class testApp : public ofBaseApp{
         void onAPIConnect(LoginEventData& e);
     
         void logout();
+        void getUser(int userID);
         void onAPIDisconnect(LoginEventData& e);
 
         void onListGroups(GroupEventData& e);
+        void onGetUser(UserEventData& e);
     
         void listEventsForGroup(int groupId);
         void onListEvents(PiecemakerEventData& e);

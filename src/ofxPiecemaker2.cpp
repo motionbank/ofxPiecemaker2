@@ -99,6 +99,7 @@ void ofxPiecemaker2::logout()
     
     httpUtils->addForm(form);
 }
+
 void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 {
     response.httpUtils->stop();
@@ -115,6 +116,36 @@ void ofxPiecemaker2::whoAmI()
     
     ofxHttpForm form;
 	form.action = url + "/user/me";
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+}
+
+#pragma mark USER METHODS
+void ofxPiecemaker2::onGetUserResponse(ofxHttpResponse& response)
+{
+    response.httpUtils->stop();
+    ofRemoveListener(response.httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetUserResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+    
+    delete response.httpUtils;
+    response.httpUtils = NULL;
+    
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    UserEventData eventData;
+    eventData.createFromJSON(parser);
+    eventData.print();
+    ofNotifyEvent(GET_USER, eventData);
+}
+
+void ofxPiecemaker2::getUser(int userId)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest();
+    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetUserResponse);
+    ofxHttpForm form;
+	form.action = url + "/user/" + ofToString(userId);
 	form.method = OFX_HTTP_GET;
     
 	httpUtils->addForm(form);

@@ -48,6 +48,18 @@ void testApp::onAPIDisconnect(LoginEventData& e)
     
 }
 
+void testApp::onGetUser(UserEventData& e)
+{
+     ofRemoveListener(api.GET_USER, this, &testApp::onGetUser);
+    ofLogVerbose(__PRETTY_FUNCTION__) << "";
+    e.print();
+}
+void testApp::getUser(int userID)
+{
+    ofAddListener(api.GET_USER, this, &testApp::onGetUser);
+    api.getUser(userID);
+}
+
 void testApp::logout()
 {
     ofAddListener(api.LOGOUT, this, &testApp::onAPIDisconnect);
@@ -186,6 +198,11 @@ void testApp::keyPressed(int key){
     if (key == 'x')
     {
         logout();
+        
+    }
+    if (key == 'u')
+    {
+        getUser(3);
         
     }
 }

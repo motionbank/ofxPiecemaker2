@@ -38,6 +38,45 @@ public:
     int created_by_user_id;
 };
 
+class UserEventData
+{
+public:
+    UserEventData()
+    {
+    
+    };
+    
+    void createFromJSON(Json::Value jsonvalue)
+    {
+        id = jsonvalue["id"].asInt();
+        name = jsonvalue["name"].asString();
+        email = jsonvalue["email"].asString();
+        api_access_key = jsonvalue["api_access_key"].asString();
+        is_super_admin = jsonvalue["is_super_admin"].asBool();
+        is_disabled = jsonvalue["is_disabled"].asBool();
+    };
+    void print()
+    {
+        stringstream info;
+        info << "id: "              << id               << "\n";
+        info << "name: "            << name             << "\n";
+        info << "email "            << email            << "\n";
+        info << "password: "        << password         << "\n";
+        info << "api_access_key: "  << api_access_key   << "\n";
+        info << "is_super_admin: "  << is_super_admin   << "\n";
+        info << "is_disabled: "     << is_disabled      << "\n";
+        ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+    };
+
+    int id;
+    string name;
+    string email;
+    string password;
+    string api_access_key;
+    bool is_super_admin;
+    bool is_disabled;
+
+};
 class PiecemakerEvent
 {
 public:
@@ -136,6 +175,7 @@ public:
     void logout();
     void listEvents(int groupId);
     
+    void getUser(int userId);
     
     void listGroups();
     void getGroup(int groupId);
@@ -144,7 +184,7 @@ public:
     string url;
     string apiKey;
     
-
+    ofEvent<UserEventData>  GET_USER;
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
     
@@ -160,12 +200,14 @@ public:
 #if 0
     static string getVersion();
     void printVersion();
-    
+    //void login(string userEmail, string userPassword);
+    //void whoAmI();
+    //void logout();
     
     void listUsers();
     
     void createUser(string userName, string userEmail, string userPassword, string userToken);
-    void getUser(int userId);
+    
     void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
     void deleteUser(int userId);
     //void listGroups();
@@ -190,6 +232,8 @@ private:
     ofxHttpUtils* createAPIRequest();
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
+    void onGetUserResponse(ofxHttpResponse& response);
+    
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);
     void onDeleteGroupResponse(ofxHttpResponse& response);
