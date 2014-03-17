@@ -20,7 +20,7 @@ public:
         info << "created_at "           << created_at           << "\n";
         info << "created_by_user_id: "  << created_by_user_id   << "\n";
         
-        ofLogVerbose(__func__) << "\n" << info.str();
+        ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
     };
     
     void createFromJSON(Json::Value jsonvalue)
@@ -59,7 +59,7 @@ public:
         info << "duration "         << duration           << "\n";
         info << "type: "            << type               << "\n";
         info << "fields.size: "     << fields.size()      << "\n";
-        ofLogVerbose(__func__) << "\n" << info.str();
+        ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
     };
 	int id;
     int event_group_id;
@@ -133,21 +133,27 @@ public:
     void setup(string url_);
     void login(string userEmail, string userPassword);
     void whoAmI();
-    
+    void logout();
     void listEvents(int groupId);
     
     
     void listGroups();
     void getGroup(int groupId);
+    void deleteGroup(int groupId);
     void createGroup(string groupTitle = "", string groupText = "");
     string url;
     string apiKey;
     
 
     ofEvent<LoginEventData> LOGIN;
+    ofEvent<LoginEventData> LOGOUT;
+    
     ofEvent<GroupEventData> GROUP;
-    ofEvent<GroupEventData> LIST_GROUP;
+    ofEvent<GroupEventData> LIST_GROUPS;
+    ofEvent<GroupEventData> GET_GROUP;
     ofEvent<GroupEventData> CREATE_GROUP;
+    ofEvent<GroupEventData> DELETE_GROUP;
+    
     ofEvent<PiecemakerEventData> LIST_EVENTS;
     
     string printResponse(ofxHttpResponse response);
@@ -155,7 +161,7 @@ public:
     static string getVersion();
     void printVersion();
     
-    void logout();
+    
     void listUsers();
     
     void createUser(string userName, string userEmail, string userPassword, string userToken);
@@ -166,7 +172,7 @@ public:
     
     //void createGroup(string groupTitle, string groupText);
     void updateGroup(int groupId, HashMap groupData);
-    void deleteGroup(int groupId);
+    //void deleteGroup(int groupId);
     //void listEvents(int groupId);
     void listEventsOfType(int groupId, string eventType);
     void listEventsWithFields(Object ... args);
@@ -181,10 +187,12 @@ public:
     
 private:
     bool ensureApiKey();
-    ofxHttpUtils httpUtils;    
+    ofxHttpUtils* createAPIRequest();
     void onLoginResponse(ofxHttpResponse& response);
+    void onLogoutResponse(ofxHttpResponse& response);
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);
+    void onDeleteGroupResponse(ofxHttpResponse& response);
     void onCreateGroupResponse(ofxHttpResponse& response);
     void onListEventsResponse(ofxHttpResponse& response);
     void onWhoAmIResponse(ofxHttpResponse& response);
