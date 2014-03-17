@@ -12,13 +12,18 @@ class testApp : public ofBaseApp{
 		
         ofxPiecemaker2 api;
         void onAPIConnect(LoginEventData& e);
+    
+        void logout();
+        void onAPIDisconnect(LoginEventData& e);
+
         void onListGroups(GroupEventData& e);
     
         void listEventsForGroup(int groupId);
         void onListEvents(PiecemakerEventData& e);
         void onGroupCreated(GroupEventData& e);
-    
+        void onGroupDeleted(GroupEventData& e);
         void createRandomGroups();
+        void deleteAllGroups();
     
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -29,4 +34,6 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+    
+    vector<Group> groupsToDelete;
 };

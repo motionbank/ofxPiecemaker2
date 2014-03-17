@@ -6,8 +6,10 @@
 #define __func__ __PRETTY_FUNCTION__
 //--------------------------------------------------------------
 void testApp::setup(){
-    ofSetLogLevel(OF_LOG_VERBOSE);
     
+    ofSetLogLevel("ofxHttpUtils", OF_LOG_SILENT);
+    ofSetLogLevel("ofAppGLFWWindow", OF_LOG_SILENT);
+    ofSetLogLevel(OF_LOG_VERBOSE);
     ofAddListener(api.LOGIN, this, &testApp::onAPIConnect);
     api.setup("http://piecemaker2-test.herokuapp.com/api/v1");
    // api.login("SuperAdmin", "SuperAdmin");
@@ -23,7 +25,7 @@ void testApp::onAPIConnect(LoginEventData& e)
     
     if(e.wasSuccessful())
     {
-        ofAddListener(api.LIST_GROUP, this, &testApp::onListGroups);
+        ofAddListener(api.LIST_GROUPS, this, &testApp::onListGroups);
         api.listGroups();
     }else
     {
@@ -32,15 +34,36 @@ void testApp::onAPIConnect(LoginEventData& e)
 
 }
 
+void testApp::onAPIDisconnect(LoginEventData& e)
+{
+    ofRemoveListener(api.LOGIN, this, &testApp::onAPIDisconnect);
+    
+    if(e.wasSuccessful())
+    {
+        ofLogVerbose() << "LOGOUT PASS";
+    }else
+    {
+        ofLogError(__func__) << "errorCode: " << e.errorCode << " reason: " << e.errorReason;
+    }
+    
+}
+
+void testApp::logout()
+{
+    ofAddListener(api.LOGOUT, this, &testApp::onAPIDisconnect);
+    api.logout();
+}
+
 void testApp::onListGroups(GroupEventData& e)
 {
     ofLogVerbose(__func__) << "groups.size(): " << e.groups.size();
-    ofRemoveListener(api.LIST_GROUP, this, &testApp::onListGroups);
+    ofRemoveListener(api.LIST_GROUPS, this, &testApp::onListGroups);
     if (e.groups.empty())
     {
        // createGroup();
     }else
     {
+        groupsToDelete = e.groups;
         for (size_t i=0; i<e.groups.size(); i++)
         {
             Group& group    = e.groups[i];
@@ -66,9 +89,9 @@ char genRandom()
 
 void testApp::createRandomGroups()
 {
-   // ofAddListener(api.CREATE_GROUP, this, &testApp::onGroupCreated);
+    ofAddListener(api.CREATE_GROUP, this, &testApp::onGroupCreated);
     
-    for (size_t i=0; i<3; i++)
+    for (size_t i=0; i<2; i++)
     {
         string title = "title ";
         string text = "text ";
@@ -84,6 +107,7 @@ void testApp::createRandomGroups()
 
 void testApp::onGroupCreated(GroupEventData& e)
 {
+    cout << "onGroupCreated" << endl;
     ofRemoveListener(api.CREATE_GROUP, this, &testApp::onGroupCreated);
     if (!e.groups.empty())
     {
@@ -114,7 +138,28 @@ void testApp::onListEvents(PiecemakerEventData& e)
     }
     
 }
+void testApp::onGroupDeleted(GroupEventData& e)
+{
+    
+}
 
+
+void testApp::deleteAllGroups()
+{
+    ofAddListener(api.DELETE_GROUP, this, &testApp::onGroupDeleted);
+    if (!groupsToDelete.empty())
+    {
+        for (size_t i=0; i<groupsToDelete.size(); i++)
+        {
+            api.deleteGroup(groupsToDelete[i].id);
+        }
+        groupsToDelete.clear();
+    }else
+    {
+        ofLogError() << "NO GROUPS TO DELETE - RELISTING";
+        api.listGroups();
+    }
+}
 
 //--------------------------------------------------------------
 void testApp::update(){
@@ -131,6 +176,17 @@ void testApp::keyPressed(int key){
     if (key == 'c')
     {
         createRandomGroups();
+       
+    }
+    if (key == 'D')
+    {
+        deleteAllGroups();
+       
+    }
+    if (key == 'x')
+    {
+        logout();
+        
     }
 }
 
