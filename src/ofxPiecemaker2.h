@@ -199,7 +199,7 @@ public:
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
     
-    string printResponse(ofxHttpResponse response);
+    
 #if 0
     static string getVersion();
     void printVersion();
@@ -235,6 +235,11 @@ private:
     
     template<typename ListenerMethod>
     ofxHttpUtils* createAPIRequest(ListenerMethod method);
+    
+    template<typename ListenerMethod>
+    void destroyAPIRequest(ofxHttpResponse& response, ListenerMethod method);
+    
+    string printResponse(ofxHttpResponse response);
     
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
