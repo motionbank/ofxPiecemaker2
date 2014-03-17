@@ -54,6 +54,8 @@ void testApp::onGetUser(UserEventData& e)
     ofLogVerbose(__PRETTY_FUNCTION__) << "";
     e.print();
 }
+
+
 void testApp::getUser(int userID)
 {
     ofAddListener(api.GET_USER, this, &testApp::onGetUser);

@@ -61,9 +61,10 @@ void ofxPiecemaker2::onLoginResponse(ofxHttpResponse& response)
 
 void ofxPiecemaker2::login(string userEmail, string userPassword)
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onLoginResponse);
     
     ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onLoginResponse);
+    //addEventListener(httpUtils, &ofxPiecemaker2::onLoginResponse);
     ofxHttpForm form;
 	form.action = url + "/user/login";
 	form.method = OFX_HTTP_POST;
@@ -91,8 +92,8 @@ void ofxPiecemaker2::onLogoutResponse(ofxHttpResponse& response)
 
 void ofxPiecemaker2::logout()
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onLogoutResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onLogoutResponse);
+    //ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onLogoutResponse);
     ofxHttpForm form;
 	form.action = url + "/user/logout";
 	form.method = OFX_HTTP_POST;
@@ -111,8 +112,8 @@ void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 }
 void ofxPiecemaker2::whoAmI()
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onWhoAmIResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onWhoAmIResponse);
+    //ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onWhoAmIResponse);
     
     ofxHttpForm form;
 	form.action = url + "/user/me";
@@ -122,6 +123,28 @@ void ofxPiecemaker2::whoAmI()
 }
 
 #pragma mark USER METHODS
+
+
+void ofxPiecemaker2::onListUsersResponse(ofxHttpResponse& response)
+{
+    response.httpUtils->stop();
+    ofRemoveListener(response.httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListUsersResponse);
+    ofLogVerbose(__func__) << printResponse(response);
+    delete response.httpUtils;
+    response.httpUtils = NULL;
+}
+
+void ofxPiecemaker2::listUsers()
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListUsersResponse);
+   // ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListUsersResponse);
+    ofxHttpForm form;
+	form.action = url + "/users";
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+}
+
 void ofxPiecemaker2::onGetUserResponse(ofxHttpResponse& response)
 {
     response.httpUtils->stop();
@@ -142,8 +165,9 @@ void ofxPiecemaker2::onGetUserResponse(ofxHttpResponse& response)
 
 void ofxPiecemaker2::getUser(int userId)
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetUserResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onGetUserResponse);
+    //ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetUserResponse);
+    //addEventListener(httpUtils, &ofxPiecemaker2::onGetUserResponse);
     ofxHttpForm form;
 	form.action = url + "/user/" + ofToString(userId);
 	form.method = OFX_HTTP_GET;
@@ -153,8 +177,8 @@ void ofxPiecemaker2::getUser(int userId)
 
 void ofxPiecemaker2::listEvents(int groupId)
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListEventsResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsResponse);
+    //ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListEventsResponse);
     ofxHttpForm form;
 	form.action = url + "/group/" + ofToString(groupId) + "/events";
 	form.method = OFX_HTTP_GET;
@@ -216,8 +240,8 @@ void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 
 void ofxPiecemaker2::createGroup(string title, string text)
 {
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onCreateGroupResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onCreateGroupResponse);
+   // ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onCreateGroupResponse);
     ofxHttpForm form;
 	form.action = url + "/group";
     form.addFormField( "title", title );
@@ -288,8 +312,8 @@ void ofxPiecemaker2::deleteGroup(int groupId)
 {
     ofLogVerbose(__func__) << "REQUEST TO DELETE groupId:" << groupId;
     
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onDeleteGroupResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onDeleteGroupResponse);
+   // ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onDeleteGroupResponse);
     ofxHttpForm form;
 	form.action = url + "/group/" + ofToString(groupId);
 	form.method = OFX_HTTP_DELETE;
@@ -300,8 +324,8 @@ void ofxPiecemaker2::deleteGroup(int groupId)
 void ofxPiecemaker2::getGroup(int groupId)
 {
     //ofLogVerbose(__func__) << "groupId: " << groupId;
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetGroupResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onGetGroupResponse);
+    //ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onGetGroupResponse);
     ofxHttpForm form;
 	form.action = url + "/group/" + ofToString(groupId);
 	form.method = OFX_HTTP_GET;
@@ -312,8 +336,8 @@ void ofxPiecemaker2::getGroup(int groupId)
 void ofxPiecemaker2::listGroups()
 {
     
-    ofxHttpUtils* httpUtils = createAPIRequest();
-    ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListGroupsResponse);
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListGroupsResponse);
+   // ofAddListener(httpUtils->newResponseEvent, this, &ofxPiecemaker2::onListGroupsResponse);
     ofxHttpForm form;
 	form.action = url + "/groups";
 	form.method = OFX_HTTP_GET;
@@ -357,10 +381,11 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
 }
 
 #pragma mark private functions
-
-ofxHttpUtils* ofxPiecemaker2::createAPIRequest()
+template<typename ListenerMethod>
+ofxHttpUtils* ofxPiecemaker2::createAPIRequest(ListenerMethod method)
 {
     ofxHttpUtils* httpUtils = new ofxHttpUtils();
+    ofAddListener(httpUtils->newResponseEvent, this, method);
     httpUtils->start();
     httpUtils->customHeaders["X-Access-Key"] = apiKey;
     return httpUtils;

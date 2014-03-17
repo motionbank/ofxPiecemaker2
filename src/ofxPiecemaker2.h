@@ -176,6 +176,7 @@ public:
     void listEvents(int groupId);
     
     void getUser(int userId);
+    void listUsers();
     
     void listGroups();
     void getGroup(int groupId);
@@ -185,11 +186,13 @@ public:
     string apiKey;
     
     ofEvent<UserEventData>  GET_USER;
+    ofEvent<UserEventData> LIST_USERS;
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
     
     ofEvent<GroupEventData> GROUP;
     ofEvent<GroupEventData> LIST_GROUPS;
+    
     ofEvent<GroupEventData> GET_GROUP;
     ofEvent<GroupEventData> CREATE_GROUP;
     ofEvent<GroupEventData> DELETE_GROUP;
@@ -203,8 +206,8 @@ public:
     //void login(string userEmail, string userPassword);
     //void whoAmI();
     //void logout();
-    
-    void listUsers();
+    //void getUser(int userId);
+    //void listUsers();
     
     void createUser(string userName, string userEmail, string userPassword, string userToken);
     
@@ -229,15 +232,20 @@ public:
     
 private:
     bool ensureApiKey();
-    ofxHttpUtils* createAPIRequest();
+    
+    template<typename ListenerMethod>
+    ofxHttpUtils* createAPIRequest(ListenerMethod method);
+    
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
     void onGetUserResponse(ofxHttpResponse& response);
-    
+    void onListUsersResponse(ofxHttpResponse& response);
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);
     void onDeleteGroupResponse(ofxHttpResponse& response);
     void onCreateGroupResponse(ofxHttpResponse& response);
     void onListEventsResponse(ofxHttpResponse& response);
     void onWhoAmIResponse(ofxHttpResponse& response);
+    
+
 };
