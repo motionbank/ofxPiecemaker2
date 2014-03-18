@@ -51,6 +51,7 @@ void eventTestApp::onGetGroup(GroupEventData& e)
             Group& group    = e.groups[i];
             group.print();
             listEventsForGroup(group.id);
+            
         }
     }
 }
@@ -63,7 +64,9 @@ void eventTestApp::listEventsForGroup(int groupId)
 {
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
-    api.listEvents( groupId );
+    //api.listEvents( groupId );
+    api.listEventsOfType( groupId, "video" );
+    
 }
 
 void eventTestApp::onListEvents(PiecemakerEventData& e)
@@ -75,7 +78,7 @@ void eventTestApp::onListEvents(PiecemakerEventData& e)
         for (size_t i=0; i<e.events.size(); i++)
         {
             PiecemakerEvent& event    = e.events[i];
-            //event.print();
+            //ofLogVerbose(__func__) << event.print();
         }
     }
     

@@ -152,22 +152,8 @@ void ofxPiecemaker2::getEvent(int groupId, int eventId)
 	httpUtils->addForm(form);
 }
 
-
-void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
+PiecemakerEventData ofxPiecemaker2::createEventDataFromResponse(ofxHttpResponse& response)
 {
-    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsResponse);
-    
-   // string responseCopy = ofToString(response.responseBody);
-    
-   // ofLogVerbose() << "responseCopy: " << responseCopy;
-    //return;
-    if (response.reasonForStatus != "OK")
-    {
-        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
-        
-        ofLogVerbose(__func__) << printResponse(response, true);
-        return;
-    }
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
     
@@ -181,8 +167,6 @@ void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
             PiecemakerEvent event;
             event.createFromJSON(parser[i]);
             events.push_back(event);
-            ofLogVerbose() << "event: \n" << event.print();
-
         }
     }else
     {
@@ -193,6 +177,22 @@ void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
     }
     
     eventData.events = events;
+    return eventData;
+
+}
+void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsResponse);
+    
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    
+    PiecemakerEventData eventData = createEventDataFromResponse(response);
     ofNotifyEvent(LIST_EVENTS, eventData);
     
 }
@@ -209,6 +209,33 @@ void ofxPiecemaker2::listEvents(int groupId)
    
 }
 
+void ofxPiecemaker2::onListEventsWithTypeResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsWithTypeResponse);
+    
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    
+    PiecemakerEventData eventData = createEventDataFromResponse(response);
+    ofNotifyEvent(LIST_EVENTS, eventData);
+    
+}
+void ofxPiecemaker2::listEventsOfType(int groupId, string eventType)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsWithTypeResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/events";
+    form.addFormField( "type", eventType );
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+    
+}
 
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {

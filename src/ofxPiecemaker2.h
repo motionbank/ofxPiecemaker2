@@ -5,6 +5,7 @@
 #include "ofxHttpUtils.h"
 #include "ofxJSONElement.h"
 
+
 class Group
 {
 public:
@@ -105,11 +106,21 @@ public:
     string event_id;
     string id;
     string value;
+    
+    void trimEnd(string& inputString)
+    {
+        inputString.erase(inputString.find_last_not_of(" \n\r\t")+1);
+        return inputString;
+    };
+    
     void createFromJSON(Json::Value jsonvalue)
     {
         id       = ofToString(jsonvalue["id"]);
         event_id = ofToString(jsonvalue["event_id"]);
         value    = ofToString(jsonvalue["value"]);
+        trimEnd(id);
+        trimEnd(event_id);
+        trimEnd(value);
     };
     string print()
     {
@@ -150,7 +161,7 @@ public:
         
                 if(fieldArray.isArray())
         {
-            ofLogVerbose(__func__) << "fields is ARRAY: " << fieldArray.size();
+            //ofLogVerbose(__func__) << "fields is ARRAY: " << fieldArray.size();
             for(int j= 0; j<fieldArray.size(); j++)
             {
                 EventField eventField;
@@ -171,12 +182,12 @@ public:
         info << "id: "  << id     << "\n";
         info << "created_by_user_id: "  << created_by_user_id     << "\n";
         info << "utc_timestamp: "   << utc_timestamp      << "\n";
-        info << "duration "         << duration           << "\n";
+        info << "duration: "         << duration           << "\n";
         info << "type: "            << type               << "\n";
         info << "fields.size: "     << fields.size()      << "\n";
         for(int j= 0; j<fields.size(); j++)
         {
-            info << "field " << j << " "  << fields[j].print() << "\n";
+            info << "field " << j << "\n"  << fields[j].print() << "\n";
         }
         //ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
         return info.str();
@@ -248,6 +259,7 @@ public:
     void whoAmI();
     void logout();
     void listEvents(int groupId);
+    void listEventsOfType(int groupId, string eventType);
     void getEvent(int groupId, int eventId);
     
     void getUser(int userId);
@@ -289,7 +301,7 @@ public:
     void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
     void deleteUser(int userId);
     //void listGroups();
-    
+    //void getGroup(int groupId);
     //void createGroup(string groupTitle, string groupText);
     void updateGroup(int groupId, HashMap groupData);
     //void deleteGroup(int groupId);
@@ -317,17 +329,24 @@ private:
     string printResponse(ofxHttpResponse response, bool skipBody = false);
     
     
-    void onGetEventResponse(ofxHttpResponse& response);
+   
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
+    void onWhoAmIResponse(ofxHttpResponse& response);
+    
     void onGetUserResponse(ofxHttpResponse& response);
     void onListUsersResponse(ofxHttpResponse& response);
+    
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);
     void onDeleteGroupResponse(ofxHttpResponse& response);
     void onCreateGroupResponse(ofxHttpResponse& response);
-    void onListEventsResponse(ofxHttpResponse& response);
-    void onWhoAmIResponse(ofxHttpResponse& response);
     
+    void onGetEventResponse(ofxHttpResponse& response);
+    void onListEventsResponse(ofxHttpResponse& response);
+    void onListEventsWithTypeResponse(ofxHttpResponse& response);
+    
+    
+    PiecemakerEventData createEventDataFromResponse(ofxHttpResponse& response);
 
 };
