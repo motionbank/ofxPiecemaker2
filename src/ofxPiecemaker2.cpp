@@ -268,6 +268,53 @@ void ofxPiecemaker2::findEvents(int groupId, map<string, string> hashMap)
 	httpUtils->addForm(form);
 
 }
+
+void ofxPiecemaker2::onListEventsWithFieldsResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsWithFieldsResponse);
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    PiecemakerEventData eventData = createEventDataFromResponse(response);
+    ofNotifyEvent(LIST_EVENTS, eventData);
+}
+
+void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
+{
+    
+    
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsWithFieldsResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/events";
+    
+    for(size_t i=0; i< fields.size(); i++)
+    {
+        EventField field = fields[i];
+        if (!field.id.empty())
+        {
+            form.addFormField( "id", field.id );
+        }
+        if (!field.event_id.empty())
+        {
+            form.addFormField( "event_id", field.event_id );
+        }
+        
+        if (!field.value.empty())
+        {
+            form.addFormField( "value", field.value );
+        }
+        
+    }
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+}
+
+#pragma mark GROUP METHODS
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateGroupResponse);

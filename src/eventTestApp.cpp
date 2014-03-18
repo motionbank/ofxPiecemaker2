@@ -71,6 +71,42 @@ void eventTestApp::listEventsForGroup(int groupId)
     hashMap["type"] = "scenefaux";
     //api.findEvents(groupId, hashMap);
     
+    vector<EventField> fields;
+
+    EventField f1;
+    f1.id = "created_by";
+    f1.event_id = "2893";
+    f1.value  = "Administrator";
+    //fields.push_back(f1);
+    
+    EventField f2;
+    f2.event_id = "3079";
+    fields.push_back(f2);
+    
+    EventField f3;
+    f3.event_id = "2343";
+    fields.push_back(f3);
+    
+    EventField f4;
+    f4.id = "location";
+    f4.value  = "LAB Halle Frankfurt";
+    //fields.push_back(f4);
+    
+    api.listEventsWithFields(groupId, fields);
+/*id: "performers"
+event_id: 3079
+value: "juliettemapp"
+    
+    field 5
+id: "state"
+event_id: 3079
+value: "normal"
+    
+    field 6
+id: "title"
+event_id: 3079
+value: "the beginning"*/
+    
 }
 
 void eventTestApp::onListEvents(PiecemakerEventData& e)

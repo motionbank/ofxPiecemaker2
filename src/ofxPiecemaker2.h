@@ -260,6 +260,7 @@ public:
     void logout();
     void listEvents(int groupId);
     void listEventsOfType(int groupId, string eventType);
+    void listEventsWithFields(int groupId, vector<EventField> fields);
     void findEvents(int groupId, map<string, string> hashMap);
     void getEvent(int groupId, int eventId);
     
@@ -308,7 +309,7 @@ public:
     //void deleteGroup(int groupId);
     //void listEvents(int groupId);
     //void listEventsOfType(int groupId, string eventType);
-    void listEventsWithFields(Object ... args);
+    //void listEventsWithFields(Object ... args);
     void listEventsBetween(int groupId, Date from, Date to);
     //void findEvents(int groupId, HashMap opts);
    // void getEvent(int groupId, int eventId);
@@ -346,6 +347,8 @@ private:
     void onGetEventResponse(ofxHttpResponse& response);
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);
+    void onListEventsWithFieldsResponse(ofxHttpResponse& response);
+
     void onFindEventsResponse(ofxHttpResponse& response);
     
     PiecemakerEventData createEventDataFromResponse(ofxHttpResponse& response);
