@@ -64,8 +64,12 @@ void eventTestApp::listEventsForGroup(int groupId)
 {
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
-    //api.listEvents( groupId );
-    api.listEventsOfType( groupId, "video" );
+   // api.listEvents( groupId );
+    //api.listEventsOfType( groupId, "marker" );
+    
+    map<string,string> hashMap;
+    hashMap["type"] = "scenefaux";
+    //api.findEvents(groupId, hashMap);
     
 }
 
@@ -78,7 +82,7 @@ void eventTestApp::onListEvents(PiecemakerEventData& e)
         for (size_t i=0; i<e.events.size(); i++)
         {
             PiecemakerEvent& event    = e.events[i];
-            //ofLogVerbose(__func__) << event.print();
+            ofLogVerbose(__func__) << event.print();
         }
     }
     

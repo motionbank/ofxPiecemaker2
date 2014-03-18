@@ -237,6 +237,37 @@ void ofxPiecemaker2::listEventsOfType(int groupId, string eventType)
     
 }
 
+void ofxPiecemaker2::onFindEventsResponse(ofxHttpResponse& response)
+{
+     destroyAPIRequest(response, &ofxPiecemaker2::onFindEventsResponse);
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    PiecemakerEventData eventData = createEventDataFromResponse(response);
+    ofNotifyEvent(LIST_EVENTS, eventData);
+}
+
+void ofxPiecemaker2::findEvents(int groupId, map<string, string> hashMap)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onFindEventsResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/events";
+    typename map<string, string>::iterator it = hashMap.begin();
+    while (it != hashMap.end())
+    {
+        form.addFormField( (*it).first, (*it).second );
+        ++it;
+    }
+    
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+
+}
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateGroupResponse);
