@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0302192A18D79059007C2608 /* eventTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0302192818D79059007C2608 /* eventTestApp.cpp */; };
 		0345B73A18D0F27F005233FA /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73118D0F27F005233FA /* json_reader.cpp */; };
 		0345B73B18D0F27F005233FA /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73318D0F27F005233FA /* json_value.cpp */; };
 		0345B73C18D0F27F005233FA /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73518D0F27F005233FA /* json_writer.cpp */; };
@@ -66,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0302192818D79059007C2608 /* eventTestApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = eventTestApp.cpp; sourceTree = "<group>"; };
+		0302192918D79059007C2608 /* eventTestApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = eventTestApp.h; sourceTree = "<group>"; };
 		0345B72518D0F27F005233FA /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
 		0345B72618D0F27F005233FA /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		0345B72718D0F27F005233FA /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
@@ -354,6 +357,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0302192818D79059007C2608 /* eventTestApp.cpp */,
+				0302192918D79059007C2608 /* eventTestApp.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
@@ -463,6 +468,7 @@
 				0345B73B18D0F27F005233FA /* json_value.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				03A8B70018CE71280028E9B1 /* ofxPiecemaker2.cpp in Sources */,
+				0302192A18D79059007C2608 /* eventTestApp.cpp in Sources */,
 				0345B73D18D0F27F005233FA /* ofxJSONElement.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				034E654318D0DB0100840D52 /* ofxHttpUtils.cpp in Sources */,

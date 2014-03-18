@@ -12,7 +12,7 @@ public:
     {
     
     }
-    void print()
+    string print()
     {
         stringstream info;
         info << "id: "                  << id                   << "\n";
@@ -21,6 +21,7 @@ public:
         info << "created_by_user_id: "  << created_by_user_id   << "\n";
         
         ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+        return info.str();
     };
     
     void createFromJSON(Json::Value jsonvalue)
@@ -36,6 +37,17 @@ public:
     string text;
     string created_at;
     int created_by_user_id;
+};
+
+class GroupEventData
+{
+public:
+    GroupEventData()
+    {
+        
+    }
+    vector<Group> groups;
+    
 };
 
 class UserEventData
@@ -55,7 +67,7 @@ public:
         is_super_admin = jsonvalue["is_super_admin"].asBool();
         is_disabled = jsonvalue["is_disabled"].asBool();
     };
-    void print()
+    string print()
     {
         stringstream info;
         info << "id: "              << id               << "\n";
@@ -66,6 +78,7 @@ public:
         info << "is_super_admin: "  << is_super_admin   << "\n";
         info << "is_disabled: "     << is_disabled      << "\n";
         ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+        return info.str();
     };
 
     int id;
@@ -77,37 +90,115 @@ public:
     bool is_disabled;
 
 };
+
+
+class EventField
+{
+public:
+    EventField()
+    {
+        id = "";
+        event_id = "";
+        value = "";
+    };
+    
+    string event_id;
+    string id;
+    string value;
+    void createFromJSON(Json::Value jsonvalue)
+    {
+        id       = ofToString(jsonvalue["id"]);
+        event_id = ofToString(jsonvalue["event_id"]);
+        value    = ofToString(jsonvalue["value"]);
+    };
+    string print()
+    {
+        stringstream info;
+        info << "id: "              << id           << "\n";
+        info << "event_id: "        << event_id     << "\n";
+        info << "value: "           << value        << "\n";
+
+       // ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+        return info.str();
+    };
+};
+
+
 class PiecemakerEvent
 {
 public:
     PiecemakerEvent()
     {
         id = -1;
-        title = "";
-        event_group_id = -1;
-        utc_timestamp = "";
-        duration = 0;
+        created_by_user_id = -1;
+        utc_timestamp = 0.0;
+        duration = 0.0;
         type = "";
         
     }
-    void print()
+    void createFromJSON(Json::Value& jsonValue)
+    {
+        
+        Json::Value eventValue = jsonValue["event"];
+        Json::Value fieldArray = jsonValue["fields"];
+        
+        id = eventValue["id"].asInt();
+        utc_timestamp = (long)eventValue["utc_timestamp"].asDouble();
+        created_by_user_id = eventValue["created_by_user_id"].asInt();
+        type = eventValue["type"].asString();
+        duration = eventValue["duration"].asDouble();
+        
+                if(fieldArray.isArray())
+        {
+            ofLogVerbose(__func__) << "fields is ARRAY: " << fieldArray.size();
+            for(int j= 0; j<fieldArray.size(); j++)
+            {
+                EventField eventField;
+                
+                eventField.id       = ofToString(fieldArray[j]["id"]);
+                eventField.event_id = ofToString(fieldArray[j]["event_id"]);
+                eventField.value    = ofToString(fieldArray[j]["value"]);
+                
+                eventField.createFromJSON(fieldArray[j]);
+                fields.push_back(eventField);
+            }
+        }
+    };
+    
+    string print()
     {
         stringstream info;
-        info << "event_group_id: "  << event_group_id     << "\n";
+        info << "id: "  << id     << "\n";
+        info << "created_by_user_id: "  << created_by_user_id     << "\n";
         info << "utc_timestamp: "   << utc_timestamp      << "\n";
         info << "duration "         << duration           << "\n";
         info << "type: "            << type               << "\n";
         info << "fields.size: "     << fields.size()      << "\n";
-        ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+        for(int j= 0; j<fields.size(); j++)
+        {
+            info << "field " << j << " "  << fields[j].print() << "\n";
+        }
+        //ofLogVerbose(__PRETTY_FUNCTION__) << "\n" << info.str();
+        return info.str();
     };
 	int id;
-    int event_group_id;
-    string title;
-	string utc_timestamp;
-	long duration;
+    int created_by_user_id;
+	long utc_timestamp;
+	float duration;
 	string type;
-	map<int, string> fields;
+	vector<EventField> fields;
 
+};
+
+
+class PiecemakerEventData
+{
+public:
+    PiecemakerEventData()
+    {
+        
+    };
+    vector<PiecemakerEvent> events;
 };
 
 class LoginEventData
@@ -143,26 +234,9 @@ private:
     bool successful;
 };
 
-class GroupEventData
-{
-public:
-    GroupEventData(vector<Group> groups_)
-    {
-        groups = groups_;
-    }
-    vector<Group> groups;
-    
-};
 
-class PiecemakerEventData
-{
-public:
-    PiecemakerEventData()
-    {
-    
-    };
-    vector<PiecemakerEvent> events;
-};
+
+
 
 
 class ofxPiecemaker2
@@ -174,6 +248,7 @@ public:
     void whoAmI();
     void logout();
     void listEvents(int groupId);
+    void getEvent(int groupId, int eventId);
     
     void getUser(int userId);
     void listUsers();
@@ -186,7 +261,7 @@ public:
     string apiKey;
     
     ofEvent<UserEventData>  GET_USER;
-    ofEvent<UserEventData> LIST_USERS;
+    ofEvent<UserEventData>  LIST_USERS;
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
     
@@ -223,7 +298,7 @@ public:
     void listEventsWithFields(Object ... args);
     void listEventsBetween(int groupId, Date from, Date to);
     void findEvents(int groupId, HashMap opts);
-    void getEvent(int groupId, int eventId);
+   // void getEvent(int groupId, int eventId);
     void createEvent(int groupId, HashMap eventData);
     void updateEvent(int groupId, int eventId, HashMap eventData);
     void deleteEvent(int groupId, int eventId);
@@ -239,8 +314,10 @@ private:
     template<typename ListenerMethod>
     void destroyAPIRequest(ofxHttpResponse& response, ListenerMethod method);
     
-    string printResponse(ofxHttpResponse response);
+    string printResponse(ofxHttpResponse response, bool skipBody = false);
     
+    
+    void onGetEventResponse(ofxHttpResponse& response);
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
     void onGetUserResponse(ofxHttpResponse& response);

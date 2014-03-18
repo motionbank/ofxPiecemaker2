@@ -26,6 +26,7 @@ void ofxPiecemaker2::setup(string url_)
 
 void ofxPiecemaker2::onLoginResponse(ofxHttpResponse& response)
 {
+    printResponse(response);
     destroyAPIRequest(response, &ofxPiecemaker2::onLoginResponse);
     
     ofxJSONElement parser;
@@ -120,7 +121,7 @@ void ofxPiecemaker2::onGetUserResponse(ofxHttpResponse& response)
     parser.parse(ofToString(response.responseBody));
     UserEventData eventData;
     eventData.createFromJSON(parser);
-    eventData.print();
+    ofLogVerbose(__func__) << eventData.print();
     ofNotifyEvent(GET_USER, eventData);
 }
 
@@ -135,6 +136,68 @@ void ofxPiecemaker2::getUser(int userId)
 	httpUtils->addForm(form);
 }
 
+#pragma mark EVENT METHODS
+void ofxPiecemaker2::onGetEventResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onGetEventResponse);
+}
+
+void ofxPiecemaker2::getEvent(int groupId, int eventId)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onGetEventResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/event/" + ofToString(eventId);
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+}
+
+
+void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsResponse);
+    
+   // string responseCopy = ofToString(response.responseBody);
+    
+   // ofLogVerbose() << "responseCopy: " << responseCopy;
+    //return;
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    
+    PiecemakerEventData eventData;
+    vector<PiecemakerEvent> events;
+    if(parser.isArray())
+    {
+        ofLogVerbose(__func__) << "parser isArray(): " << parser.isArray() << " size " << parser.size();
+        for(int i= 0; i<parser.size(); i++)
+        {
+            PiecemakerEvent event;
+            event.createFromJSON(parser[i]);
+            events.push_back(event);
+            ofLogVerbose() << "event: \n" << event.print();
+
+        }
+    }else
+    {
+        if (parser.isObject())
+        {
+            ofLogVerbose(__func__) << "isObject()!";
+        }
+    }
+    
+    eventData.events = events;
+    ofNotifyEvent(LIST_EVENTS, eventData);
+    
+}
+
+
 void ofxPiecemaker2::listEvents(int groupId)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsResponse);
@@ -146,48 +209,13 @@ void ofxPiecemaker2::listEvents(int groupId)
    
 }
 
-void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
-{
-   
-    
-    destroyAPIRequest(response, &ofxPiecemaker2::onListEventsResponse);
-    
-    ofxJSONElement parser;
-    parser.parse(ofToString(response.responseBody));
-
-    PiecemakerEventData eventData;
-    vector<PiecemakerEvent> events;
-    if(parser.isArray())
-    {
-        //ofLogVerbose(__func__) << "isArray(): " << parser.isArray() << " size " << parser.size();
-        for(int i= 0; i<parser.size(); i++)
-        {
-            PiecemakerEvent event;
-            Json::Value jsonEvent = parser[i]["event"];
-            //ofLogVerbose() << "isObject : " << jsonEvent.isObject();
-            
-            event.id = jsonEvent["id"].asInt();
-            event.title = jsonEvent["title"].asString();
-            event.event_group_id = jsonEvent["event_group_id"].asInt();
-            event.utc_timestamp = jsonEvent["created_at"].asString();
-            event.duration = jsonEvent["duration"].asInt();
-            event. type = jsonEvent["type"].asString();
-           // event.fields[i] = ofToString("STRING VALUE" + ofToString(i));
-            //map<int, string> fields;
-            events.push_back(event);
-        }
-    }
-    
-    eventData.events = events;
-    ofNotifyEvent(LIST_EVENTS, eventData);
-    
-}
 
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateGroupResponse);
     vector<Group> groups;
-    GroupEventData eventData(groups);
+    GroupEventData eventData;
+    eventData.groups = groups;
     ofNotifyEvent(CREATE_GROUP, eventData);
 }
 
@@ -210,22 +238,9 @@ void ofxPiecemaker2::onDeleteGroupResponse(ofxHttpResponse& response)
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
     
-   /* vector<Group> groups;
+    GroupEventData eventData;
+    ofNotifyEvent(GET_GROUP, eventData);
     
-    if(parser.isArray())
-    {
-        //ofLogVerbose(__func__) << "MULTIPLE ELEMENTS: " << parser.size();
-        
-        for(int i= 0; i<parser.size(); i++)
-        {
-            Group group;
-            group.createFromJSON(parser[i]);
-            groups.push_back(group);
-        }
-        
-    }
-    GroupEventData eventData(groups);
-    eventData.groups = groups;*/
 }
 
 void ofxPiecemaker2::onGetGroupResponse(ofxHttpResponse& response)
@@ -253,10 +268,10 @@ void ofxPiecemaker2::onGetGroupResponse(ofxHttpResponse& response)
         Group singleGroup;
         singleGroup.createFromJSON(parser);
         groups.push_back(singleGroup);
-        ofLogVerbose(__func__) << "SINGLE ELEMENT";
-        singleGroup.print();
+        ofLogVerbose(__func__) << "SINGLE ELEMENT: " << singleGroup.print();
+        
     }
-    GroupEventData eventData(groups);
+    GroupEventData eventData;
     eventData.groups = groups;
     ofNotifyEvent(GET_GROUP, eventData);
 }
@@ -319,7 +334,7 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
         
     }
     
-    GroupEventData eventData(groups);
+    GroupEventData eventData;
     eventData.groups = groups;
     ofNotifyEvent(LIST_GROUPS, eventData);
 
@@ -347,18 +362,22 @@ void ofxPiecemaker2::destroyAPIRequest(ofxHttpResponse& response, ListenerMethod
     }
     response.httpUtils->stop();
     ofRemoveListener(response.httpUtils->newResponseEvent, this, method);
-    ofLogVerbose(__func__) << printResponse(response);
+    //ofLogVerbose(__func__) << printResponse(response);
     delete response.httpUtils;
     response.httpUtils = NULL;
 }
 
-string ofxPiecemaker2::printResponse(ofxHttpResponse response)
+string ofxPiecemaker2::printResponse(ofxHttpResponse response, bool skipBody)
 {
     stringstream responseString;
     responseString << "status: "            << response.status          << "\n";
     responseString << "reasonForStatus: "   << response.reasonForStatus << "\n";
     responseString<< "contentType: "        << response.contentType     << "\n";
-    responseString << "responseBody: "      << response.responseBody    << "\n";
+    if(!skipBody)
+    {
+        responseString << "responseBody: "      << response.responseBody    << "\n";
+    }
+    
     
     string timeFormat = "%Y-%m-%d-%H-%M-%S-%i";
     string timestampString = Poco::DateTimeFormatter::format(response.timestamp, timeFormat);

@@ -22,7 +22,7 @@ void testApp::setup(){
 void testApp::onAPIConnect(LoginEventData& e)
 {
     ofRemoveListener(api.LOGIN, this, &testApp::onAPIConnect);
-    
+    ofLogVerbose() << "apiKey: " << api.apiKey;
     if(e.wasSuccessful())
     {
         ofAddListener(api.LIST_GROUPS, this, &testApp::onListGroups);
@@ -31,7 +31,7 @@ void testApp::onAPIConnect(LoginEventData& e)
     {
         ofLogError(__func__) << "errorCode: " << e.errorCode << " reason: " << e.errorReason;
     }
-
+    
 }
 
 void testApp::onAPIDisconnect(LoginEventData& e)
