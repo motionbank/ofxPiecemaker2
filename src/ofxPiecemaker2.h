@@ -271,6 +271,8 @@ public:
     void getGroup(int groupId);
     void deleteGroup(int groupId);
     void createGroup(string groupTitle = "", string groupText = "");
+    
+    void getSystemTime();
     string url;
     string apiKey;
     
@@ -287,6 +289,7 @@ public:
     ofEvent<GroupEventData> DELETE_GROUP;
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
+    ofEvent< Poco::Timestamp> DATE_EVENT;
     
     
 #if 0
@@ -316,7 +319,7 @@ public:
     void createEvent(int groupId, HashMap eventData);
     void updateEvent(int groupId, int eventId, HashMap eventData);
     void deleteEvent(int groupId, int eventId);
-    void getSystemTime();
+    //void getSystemTime();
 #endif
     
 private:
@@ -350,6 +353,9 @@ private:
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
 
     void onFindEventsResponse(ofxHttpResponse& response);
+    
+    
+    void onGetSystemTimeResponse(ofxHttpResponse& response);
     
     PiecemakerEventData createEventDataFromResponse(ofxHttpResponse& response);
 

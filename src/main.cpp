@@ -1,8 +1,8 @@
 #include "ofMain.h"
 
 
-//#define use_testApp
-#define use_eventTestApp
+#define use_testApp
+//#define use_eventTestApp
 
 #ifdef use_testApp
 

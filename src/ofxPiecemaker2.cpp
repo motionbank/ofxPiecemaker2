@@ -294,20 +294,32 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
     for(size_t i=0; i< fields.size(); i++)
     {
         EventField field = fields[i];
+       
+        
         if (!field.id.empty())
         {
-            form.addFormField( "id", field.id );
+            Json::Value idValue;
+            idValue["id"] = field.id;
+            
+            form.addFormField( "fields[id]", ofToString(idValue) );
         }
         if (!field.event_id.empty())
         {
-            form.addFormField( "event_id", field.event_id );
+            //fieldsValue["event_id"] = field.event_id;
+           // form.addFormField( "field[event_id]", field.event_id );
         }
         
         if (!field.value.empty())
         {
-            form.addFormField( "value", field.value );
+            Json::Value aValue;
+            aValue["value"] = field.value;
+            ofLogVerbose(__func__) << "aValue: " << aValue;
+            form.addFormField( "fields", ofToString(aValue) );
+            //fieldsValue["value"] = field.value;
+            //form.addFormField( "field[value]", field.value );
         }
-        
+        //ofLogVerbose() << "fieldsValue: " << ofToString(fieldsValue);
+        //form.addFormField( "fields", "[" + ofToString(fieldsValue) + "]");
     }
 	form.method = OFX_HTTP_GET;
     
@@ -443,6 +455,40 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
     eventData.groups = groups;
     ofNotifyEvent(LIST_GROUPS, eventData);
 
+}
+
+void ofxPiecemaker2::onGetSystemTimeResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onGetSystemTimeResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response); // responseBody: {"utc_timestamp":1395683209.9653654}
+
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    
+    //parser["utc_timestamp"].asString();
+    
+    ofLogVerbose(__func__) << "utc_timestamp: " << parser["utc_timestamp"];
+   // Int64 value = parser["utc_timestamp"].asInt64();
+    
+    
+    //ofLogVerbose(__func__) << "value: " << value;
+    
+    Poco::Timestamp pocoTimestamp;
+    pocoTimestamp.fromUtcTime(parser["utc_timestamp"].asDouble());
+   
+    //responseString << "timestamp: " << timestampString << "\n";
+    
+     ofNotifyEvent(DATE_EVENT, pocoTimestamp);
+}
+
+void ofxPiecemaker2::getSystemTime()
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onGetSystemTimeResponse);
+    ofxHttpForm form;
+	form.action = url + "/system/utc_timestamp";
+	form.method = OFX_HTTP_GET;
+	httpUtils->addForm(form);
 }
 
 #pragma mark PRIVATE METHODS

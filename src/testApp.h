@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxPiecemaker2.h"
+#include "Poco/DateTime.h"
+#include "Poco/DateTimeFormatter.h"
 
 
 class testApp : public ofBaseApp{
@@ -15,6 +17,8 @@ class testApp : public ofBaseApp{
     
         void logout();
         void getUser(int userID);
+    
+        void onGetSystemTime(Poco::Timestamp& pocoTimestamp);
         void onAPIDisconnect(LoginEventData& e);
 
         void onListGroups(GroupEventData& e);

@@ -18,13 +18,24 @@ void testApp::setup(){
 }
 
 
-
+void testApp::onGetSystemTime(Poco::Timestamp& pocoTimestamp)
+{
+    ofRemoveListener(api.DATE_EVENT, this, &testApp::onGetSystemTime);
+    Poco::DateTime dateTime(pocoTimestamp);
+    
+    string timeFormat = "%Y-%m-%d-%H-%M-%S-%i";
+    string timestampString = Poco::DateTimeFormatter::format(pocoTimestamp, timeFormat);
+    
+    ofLogVerbose(__func__) << "timestampString: " << timestampString;
+}
 void testApp::onAPIConnect(LoginEventData& e)
 {
     ofRemoveListener(api.LOGIN, this, &testApp::onAPIConnect);
     ofLogVerbose() << "apiKey: " << api.apiKey;
     if(e.wasSuccessful())
     {
+        ofAddListener(api.DATE_EVENT, this, &testApp::onGetSystemTime);
+        api.getSystemTime();
         ofAddListener(api.LIST_GROUPS, this, &testApp::onListGroups);
         api.listGroups();
     }else
