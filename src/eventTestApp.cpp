@@ -3,7 +3,7 @@
 
 
 
-int TEST_GROUP_ID = 109;
+int TEST_GROUP_ID = 107;
 
 #define __func__ __PRETTY_FUNCTION__
 //--------------------------------------------------------------
@@ -64,7 +64,8 @@ void eventTestApp::listEventsForGroup(int groupId)
 {
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
-   // api.listEvents( groupId );
+    api.listEvents( groupId );
+    return;
     //api.listEventsOfType( groupId, "marker" );
     
     map<string,string> hashMap;
@@ -116,6 +117,7 @@ void eventTestApp::onListEvents(PiecemakerEventData& e)
     ofRemoveListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
     if(!e.events.empty())
     {
+        eventsToDelete = e.events;
         for (size_t i=0; i<e.events.size(); i++)
         {
             PiecemakerEvent& event    = e.events[i];
@@ -152,6 +154,27 @@ void eventTestApp::createRandomEvent()
     
     api.createEvent(107, pieceMakerEvent);
 }
+
+void eventTestApp::onDeleteEvent(PiecemakerEventData& e)
+{
+    ofLogVerbose(__func__) << "";
+    ofRemoveListener(api.DELETE_EVENT, this, &eventTestApp::onCreateEvent);
+}
+
+void eventTestApp::deleteListedEvents()
+{
+    for (size_t i=0; i<eventsToDelete.size(); i++)
+    {
+        PiecemakerEvent& event    = eventsToDelete[i];
+        if (i%2 == 0)
+        {
+            ofAddListener(api.DELETE_EVENT, this, &eventTestApp::onDeleteEvent);
+            api.deleteEvent(event.id);
+        }
+        
+        
+    }
+}
 //--------------------------------------------------------------
 void eventTestApp::update(){
 
@@ -169,6 +192,9 @@ void eventTestApp::keyPressed(int key){
     {
         createRandomEvent();
     }
-  
+    if (key == 'x')
+    {
+        deleteListedEvents();
+    }
 }
 

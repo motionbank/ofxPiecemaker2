@@ -357,6 +357,28 @@ void ofxPiecemaker2::createEvent(int groupId, PiecemakerEvent& pieceMakerEvent)
 	httpUtils->addForm(form);
 }
 
+void ofxPiecemaker2::onDeleteEventResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onDeleteEventResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+    
+    PiecemakerEventData eventData; //TODO Generic response type needed?
+    ofNotifyEvent(DELETE_EVENT, eventData);
+}
+
+void ofxPiecemaker2::deleteEvent(int eventId)
+{
+    ofLogVerbose(__func__) << " eventId: " << eventId;
+    
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onDeleteEventResponse);
+    ofxHttpForm form;
+	form.action = url + "/event/" + ofToString(eventId);
+	form.method = OFX_HTTP_DELETE;
+    
+	httpUtils->addForm(form);
+    
+}
 
 #pragma mark GROUP METHODS
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)

@@ -18,9 +18,11 @@ class eventTestApp : public ofBaseApp{
         void listEventsForGroup(int groupId);
         void onListEvents(PiecemakerEventData& e);
         void onCreateEvent(PiecemakerEventData& e);
+        void onDeleteEvent(PiecemakerEventData& e);
         void createRandomEvent();
     
 		void keyPressed(int key);
 
- 
+        vector<PiecemakerEvent> eventsToDelete;
+        void deleteListedEvents();
 };

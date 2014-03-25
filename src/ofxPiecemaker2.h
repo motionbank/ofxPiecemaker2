@@ -264,7 +264,7 @@ public:
     void listEventsWithFields(int groupId, vector<EventField> fields);
     void findEvents(int groupId, map<string, string> hashMap);
     void getEvent(int groupId, int eventId);
-    
+    void deleteEvent(int eventId);
     void getUser(int userId);
     void listUsers();
     
@@ -291,7 +291,8 @@ public:
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
     ofEvent<PiecemakerEventData> CREATE_EVENT;
-    
+    ofEvent<PiecemakerEventData> DELETE_EVENT;
+
     ofEvent< Poco::Timestamp> DATE_EVENT;
     
     void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
@@ -320,9 +321,9 @@ public:
     void listEventsBetween(int groupId, Date from, Date to);
     //void findEvents(int groupId, HashMap opts);
    // void getEvent(int groupId, int eventId);
-    void createEvent(int groupId, HashMap eventData);
+    //void createEvent(int groupId, HashMap eventData);
     void updateEvent(int groupId, int eventId, HashMap eventData);
-    void deleteEvent(int groupId, int eventId);
+    //void deleteEvent(int groupId, int eventId);
     //void getSystemTime();
 #endif
     
@@ -353,12 +354,15 @@ private:
     
     void onGetEventResponse(ofxHttpResponse& response);
     void onCreateEventResponse(ofxHttpResponse& response);
+    void onDeleteEventResponse(ofxHttpResponse& response);
+    
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
 
     void onFindEventsResponse(ofxHttpResponse& response);
     
+
     
     void onGetSystemTimeResponse(ofxHttpResponse& response);
     
