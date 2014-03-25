@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxPiecemaker2.h"
-#include "Poco/DateTime.h"
-#include "Poco/DateTimeFormatter.h"
+
 
 
 class testApp : public ofBaseApp{

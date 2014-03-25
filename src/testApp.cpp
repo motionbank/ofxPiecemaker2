@@ -1,6 +1,18 @@
 #include "testApp.h"
 
 
+static const char alphanum[] =
+"0123456789"
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+"abcdefghijklmnopqrstuvwxyz";
+
+
+
+char genRandom()
+{
+    int stringLength = sizeof(alphanum) - 1;
+    return alphanum[rand() % stringLength];
+};
 
 
 #define __func__ __PRETTY_FUNCTION__
@@ -98,18 +110,7 @@ void testApp::onListGroups(GroupEventData& e)
         }        
     }
 }
-static const char alphanum[] =
-"0123456789"
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-"abcdefghijklmnopqrstuvwxyz";
 
-
-
-char genRandom()
-{
-    int stringLength = sizeof(alphanum) - 1;
-    return alphanum[rand() % stringLength];
-}
 
 
 void testApp::createRandomGroups()

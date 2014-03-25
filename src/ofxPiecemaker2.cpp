@@ -326,6 +326,38 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
 	httpUtils->addForm(form);
 }
 
+void ofxPiecemaker2::onCreateEventResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onCreateEventResponse);
+    PiecemakerEventData eventData; //TODO Generic response type needed?
+    ofNotifyEvent(CREATE_EVENT, eventData);
+}
+
+void ofxPiecemaker2::createEvent(int groupId, PiecemakerEvent& pieceMakerEvent)
+{
+    ofLogVerbose(__func__) << "groupId: " << groupId << " "  << pieceMakerEvent.print();
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onCreateEventResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/event";
+    form.addFormField( "duration", ofToString(pieceMakerEvent.duration) ); //TODO timestamp bad
+    form.addFormField( "type", pieceMakerEvent.type );
+    form.addFormField( "utc_timestamp", ofToString(pieceMakerEvent.utc_timestamp) );
+    
+    for(int i=0; i<pieceMakerEvent.fields.size(); i++)
+    {
+        EventField& field = pieceMakerEvent.fields[i];
+        
+        string formFieldKey = "fields["+field.id+"]";
+        
+        form.addFormField( formFieldKey, field.value );
+    }
+    
+	form.method = OFX_HTTP_POST;
+    
+	httpUtils->addForm(form);
+}
+
+
 #pragma mark GROUP METHODS
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {

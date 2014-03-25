@@ -125,6 +125,33 @@ void eventTestApp::onListEvents(PiecemakerEventData& e)
     
 }
 
+void eventTestApp::onCreateEvent(PiecemakerEventData& e)
+{
+    ofLogVerbose(__func__) << "";
+    ofRemoveListener(api.CREATE_EVENT, this, &eventTestApp::onCreateEvent);
+}
+void eventTestApp::createRandomEvent()
+{
+    ofAddListener(api.CREATE_EVENT, this, &eventTestApp::onCreateEvent);
+    PiecemakerEvent pieceMakerEvent;
+    Poco::Timestamp now;
+    now.update();
+    pieceMakerEvent.utc_timestamp = (long)now.utcTime();
+    ofLogVerbose() << "pieceMakerEvent.utc_timestamp: " << pieceMakerEvent.utc_timestamp << " now.utcTime(): " << now.utcTime();
+    pieceMakerEvent.type = "test-type-OF";
+    pieceMakerEvent.duration = 3000;
+    
+    for (int i = 0; i<4; i++)
+    {
+        EventField field;
+        field.id = "test.of.field.id" + ofToString(i);
+        field.value = "test.of.field.value"+ ofToString(i);
+        pieceMakerEvent.fields.push_back(field);
+    }
+   
+    
+    api.createEvent(107, pieceMakerEvent);
+}
 //--------------------------------------------------------------
 void eventTestApp::update(){
 
@@ -138,9 +165,9 @@ void eventTestApp::draw(){
 //--------------------------------------------------------------
 void eventTestApp::keyPressed(int key){
    
-    if (key == 'x')
+    if (key == 'c')
     {
-        
+        createRandomEvent();
     }
   
 }

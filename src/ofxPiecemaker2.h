@@ -4,7 +4,8 @@
 
 #include "ofxHttpUtils.h"
 #include "ofxJSONElement.h"
-
+#include "Poco/DateTime.h"
+#include "Poco/DateTimeFormatter.h"
 
 class Group
 {
@@ -289,8 +290,11 @@ public:
     ofEvent<GroupEventData> DELETE_GROUP;
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
+    ofEvent<PiecemakerEventData> CREATE_EVENT;
+    
     ofEvent< Poco::Timestamp> DATE_EVENT;
     
+    void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
     
 #if 0
     static string getVersion();
@@ -348,6 +352,7 @@ private:
     void onCreateGroupResponse(ofxHttpResponse& response);
     
     void onGetEventResponse(ofxHttpResponse& response);
+    void onCreateEventResponse(ofxHttpResponse& response);
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
