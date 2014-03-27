@@ -262,8 +262,11 @@ public:
     void listEvents(int groupId);
     void listEventsOfType(int groupId, string eventType);
     void listEventsWithFields(int groupId, vector<EventField> fields);
+    //void listEventsBetween(int groupId, Date from, Date to);
+    void listEventsBetween(int groupId, long fromUTCTimestamp, long toUTCTimeStamp);
     void findEvents(int groupId, map<string, string> hashMap);
     void getEvent(int groupId, int eventId);
+    void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
     void deleteEvent(int eventId);
     void getUser(int userId);
     void listUsers();
@@ -295,7 +298,7 @@ public:
 
     ofEvent< Poco::Timestamp> DATE_EVENT;
     
-    void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
+    
     
 #if 0
     static string getVersion();
@@ -318,7 +321,7 @@ public:
     //void listEvents(int groupId);
     //void listEventsOfType(int groupId, string eventType);
     //void listEventsWithFields(Object ... args);
-    void listEventsBetween(int groupId, Date from, Date to);
+    //void listEventsBetween(int groupId, Date from, Date to);
     //void findEvents(int groupId, HashMap opts);
    // void getEvent(int groupId, int eventId);
     //void createEvent(int groupId, HashMap eventData);
@@ -359,7 +362,7 @@ private:
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
-
+    void onListEventsBetweenResponse(ofxHttpResponse& response);
     void onFindEventsResponse(ofxHttpResponse& response);
     
 

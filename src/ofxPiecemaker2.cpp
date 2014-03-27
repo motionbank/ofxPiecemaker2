@@ -307,6 +307,32 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
     
 	httpUtils->addForm(form);
 }
+void ofxPiecemaker2::onListEventsBetweenResponse(ofxHttpResponse& response)
+{
+     destroyAPIRequest(response, &ofxPiecemaker2::onListEventsBetweenResponse);
+    if (response.reasonForStatus != "OK")
+    {
+        ofLogError(__func__) << "WEIRD RESPONSE: " << response.reasonForStatus;
+        
+        ofLogVerbose(__func__) << printResponse(response, true);
+        return;
+    }
+    PiecemakerEventData eventData = createEventDataFromResponse(response);
+    ofNotifyEvent(LIST_EVENTS, eventData);
+    
+}
+void ofxPiecemaker2::listEventsBetween(int groupId, long fromUTCTimestamp, long toUTCTimeStamp)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsBetweenResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(groupId) + "/events";
+    form.addFormField("from", ofToString(fromUTCTimestamp));
+    form.addFormField("to", ofToString(toUTCTimeStamp));
+    
+	form.method = OFX_HTTP_GET;
+    
+	httpUtils->addForm(form);
+}
 
 void ofxPiecemaker2::onCreateEventResponse(ofxHttpResponse& response)
 {

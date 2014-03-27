@@ -9,7 +9,7 @@ int TEST_GROUP_ID = 109;
 //--------------------------------------------------------------
 void eventTestApp::setup(){
     
-    ofSetLogLevel("ofxHttpUtils", OF_LOG_SILENT);
+    //ofSetLogLevel("ofxHttpUtils", OF_LOG_SILENT);
     ofSetLogLevel("ofAppGLFWWindow", OF_LOG_SILENT);
     ofSetLogLevel(OF_LOG_VERBOSE);
     
@@ -58,56 +58,73 @@ void eventTestApp::onGetGroup(GroupEventData& e)
 
 
 
-
 void eventTestApp::listEventsForGroup(int groupId)
 {
+
+    int testId = 5;
+    
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
-    //api.listEvents( groupId );
-    //return;
-    //api.listEventsOfType( groupId, "marker" );
-    
-   // map<string,string> hashMap;
-   // hashMap["type"] = "scenefaux";
-    //api.findEvents(groupId, hashMap);
-    
-    vector<EventField> fields;
-
-    EventField f1;
-    f1.id = "created_by";
-    f1.value  = "Allison";
-    //fields.push_back(f1);
-    
-    EventField f2;
-    f2.id = "type";
-    f2.value  = "marker";
-    //fields.push_back(f2);
-    
-    EventField f4;
-    f4.id = "location";
-    f4.value  = "LAB Halle Frankfurt";
-    fields.push_back(f4);
-    
-    api.listEventsWithFields(groupId, fields);
-/*id: "performers"
-event_id: 3079
-value: "juliettemapp"
-    
-    field 5
-id: "state"
-event_id: 3079
-value: "normal"
-    
-    field 6
-id: "title"
-event_id: 3079
-value: "the beginning"*/
-    
+    switch (testId)
+    {
+        case 0: //List All Events
+        {
+            api.listEvents( groupId );
+            break;
+        }
+        case 1: //Find Events
+        {
+            map<string,string> hashMap;
+            hashMap["type"] = "scenefaux";
+            api.findEvents(groupId, hashMap);
+            break;
+        }
+        case 2: //List All Events
+        {
+            vector<EventField> fields;
+            EventField f1;
+            f1.id = "created_by";
+            f1.value  = "Allison";
+            //fields.push_back(f1);
+            
+            EventField f2;
+            f2.id = "type";
+            f2.value  = "marker";
+            //fields.push_back(f2);
+            
+            EventField f4;
+            f4.id = "location";
+            f4.value  = "LAB Halle Frankfurt";
+            fields.push_back(f4);
+            
+            api.listEventsWithFields(groupId, fields);
+            break;
+        }
+        case 4: //List Events of type
+        {
+            api.listEventsOfType( groupId, "marker" );
+            break;
+        }
+        case 5: //List Events of type
+        {
+            //Wed, 20 Apr 2011 19:30:37 GMT
+            //Thu, 21 Apr 2011 09:23:57 GMT
+            //219 responses
+            api.listEventsBetween( groupId, 1303327837, 1303377837 );
+            break;
+        }
+        default:
+        {
+            ofRemoveListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
+             break;
+        }
+           
+    }
 }
 
 void eventTestApp::onListEvents(PiecemakerEventData& e)
 {
-    ofLogVerbose(__func__) << "events.size(): " << e.events.size();
+    ofLogVerbose(__func__) << "events.size()-------------------------------->: " << e.events.size();
     ofRemoveListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
     if(!e.events.empty())
     {
