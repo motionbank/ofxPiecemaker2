@@ -25,4 +25,5 @@ class eventTestApp : public ofBaseApp{
 
         vector<PiecemakerEvent> eventsToDelete;
         void deleteListedEvents();
+        
 };

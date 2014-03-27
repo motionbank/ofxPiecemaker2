@@ -271,6 +271,7 @@ void ofxPiecemaker2::findEvents(int groupId, map<string, string> hashMap)
 
 void ofxPiecemaker2::onListEventsWithFieldsResponse(ofxHttpResponse& response)
 {
+    ofLogVerbose(__func__) << printResponse(response);
     destroyAPIRequest(response, &ofxPiecemaker2::onListEventsWithFieldsResponse);
     if (response.reasonForStatus != "OK")
     {
@@ -293,33 +294,12 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
     
     for(size_t i=0; i< fields.size(); i++)
     {
-        EventField field = fields[i];
-       
-        
-        if (!field.id.empty())
+        EventField& field = fields[i];
+        if (!field.id.empty() && !field.value.empty())
         {
-            Json::Value idValue;
-            idValue["id"] = field.id;
-            
-            form.addFormField( "fields[id]", ofToString(idValue) );
+            form.addFormField( "fields["+field.id+"]", field.value );
         }
-        if (!field.event_id.empty())
-        {
-            //fieldsValue["event_id"] = field.event_id;
-           // form.addFormField( "field[event_id]", field.event_id );
-        }
-        
-        if (!field.value.empty())
-        {
-            Json::Value aValue;
-            aValue["value"] = field.value;
-            ofLogVerbose(__func__) << "aValue: " << aValue;
-            form.addFormField( "fields", ofToString(aValue) );
-            //fieldsValue["value"] = field.value;
-            //form.addFormField( "field[value]", field.value );
-        }
-        //ofLogVerbose() << "fieldsValue: " << ofToString(fieldsValue);
-        //form.addFormField( "fields", "[" + ofToString(fieldsValue) + "]");
+
     }
 	form.method = OFX_HTTP_GET;
     

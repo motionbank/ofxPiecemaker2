@@ -3,7 +3,7 @@
 
 
 
-int TEST_GROUP_ID = 107;
+int TEST_GROUP_ID = 109;
 
 #define __func__ __PRETTY_FUNCTION__
 //--------------------------------------------------------------
@@ -16,7 +16,6 @@ void eventTestApp::setup(){
     ofAddListener(api.LOGIN, this, &eventTestApp::onAPIConnect);
     api.setup("http://piecemaker2-test.herokuapp.com/api/v1");
     api.login("test@fake.motionbank.org", "test@fake.motionbank.org");
-
 }
 
 
@@ -64,36 +63,31 @@ void eventTestApp::listEventsForGroup(int groupId)
 {
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
-    api.listEvents( groupId );
-    return;
+    //api.listEvents( groupId );
+    //return;
     //api.listEventsOfType( groupId, "marker" );
     
-    map<string,string> hashMap;
-    hashMap["type"] = "scenefaux";
+   // map<string,string> hashMap;
+   // hashMap["type"] = "scenefaux";
     //api.findEvents(groupId, hashMap);
     
     vector<EventField> fields;
 
     EventField f1;
-    //f1.id = "created_by";
-    //f1.event_id = "2893";
+    f1.id = "created_by";
     f1.value  = "Allison";
-    fields.push_back(f1);
+    //fields.push_back(f1);
     
     EventField f2;
-    f2.event_id = "3079";
+    f2.id = "type";
+    f2.value  = "marker";
     //fields.push_back(f2);
-    
-    EventField f3;
-    f3.event_id = "2343";
-    //fields.push_back(f3);
     
     EventField f4;
     f4.id = "location";
-    f4.value  = "LAB Halle Frankfurt";
-    //fields.push_back(f4);
+    f4.value  = "LAB%20Halle%20Frankfurt";
+    fields.push_back(f4);
     
-    //TODO Not working yet
     api.listEventsWithFields(groupId, fields);
 /*id: "performers"
 event_id: 3079
@@ -152,7 +146,7 @@ void eventTestApp::createRandomEvent()
     }
    
     
-    api.createEvent(107, pieceMakerEvent);
+    api.createEvent(TEST_GROUP_ID, pieceMakerEvent);
 }
 
 void eventTestApp::onDeleteEvent(PiecemakerEventData& e)
@@ -190,11 +184,11 @@ void eventTestApp::keyPressed(int key){
    
     if (key == 'c')
     {
-        createRandomEvent();
+        //createRandomEvent();
     }
     if (key == 'x')
     {
-        deleteListedEvents();
+        //deleteListedEvents();
     }
 }
 
