@@ -10,7 +10,7 @@
 
 #include "ofxPiecemaker2.h"
 #include "Poco/DateTimeFormatter.h"
-
+#include "Poco/URI.h"
 
 
 ofxPiecemaker2::ofxPiecemaker2()
@@ -297,7 +297,9 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
         EventField& field = fields[i];
         if (!field.id.empty() && !field.value.empty())
         {
-            form.addFormField( "fields["+field.id+"]", field.value );
+            Poco::URI encodedValue(field.value);
+            Poco::URI encodedId(field.id);
+            form.addFormField( "fields["+encodedId.toString()+"]", encodedValue.toString() );
         }
 
     }

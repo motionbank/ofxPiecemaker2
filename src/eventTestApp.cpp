@@ -85,7 +85,7 @@ void eventTestApp::listEventsForGroup(int groupId)
     
     EventField f4;
     f4.id = "location";
-    f4.value  = "LAB%20Halle%20Frankfurt";
+    f4.value  = "LAB Halle Frankfurt";
     fields.push_back(f4);
     
     api.listEventsWithFields(groupId, fields);
