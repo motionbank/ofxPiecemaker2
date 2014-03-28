@@ -14,8 +14,9 @@ class eventTestApp : public ofBaseApp{
         void onAPIConnect(LoginEventData& e);
     
         void onGetGroup(GroupEventData& e);
+        void onUpdatedGroup(GroupEventData& e);
     
-        void listEventsForGroup(int groupId);
+        void listEventsForGroup(Group& group);
         void onListEvents(PiecemakerEventData& e);
         void onCreateEvent(PiecemakerEventData& e);
         void onDeleteEvent(PiecemakerEventData& e);

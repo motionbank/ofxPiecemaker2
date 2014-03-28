@@ -12,13 +12,16 @@ class Group
 public:
     Group()
     {
-    
+        id = -1;
+        title = "";
+        text = "";
     }
     string print()
     {
         stringstream info;
         info << "id: "                  << id                   << "\n";
         info << "title: "               << title                << "\n";
+        info << "text: "               <<  text                << "\n";
         info << "created_at "           << created_at           << "\n";
         info << "created_by_user_id: "  << created_by_user_id   << "\n";
         
@@ -275,7 +278,7 @@ public:
     void getGroup(int groupId);
     void deleteGroup(int groupId);
     void createGroup(string groupTitle = "", string groupText = "");
-    
+    void updateGroup(Group& group);
     void getSystemTime();
     string url;
     string apiKey;
@@ -291,6 +294,7 @@ public:
     ofEvent<GroupEventData> GET_GROUP;
     ofEvent<GroupEventData> CREATE_GROUP;
     ofEvent<GroupEventData> DELETE_GROUP;
+    ofEvent<GroupEventData> UPDATE_GROUP;
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
     ofEvent<PiecemakerEventData> CREATE_EVENT;
@@ -358,6 +362,7 @@ private:
     void onGetEventResponse(ofxHttpResponse& response);
     void onCreateEventResponse(ofxHttpResponse& response);
     void onDeleteEventResponse(ofxHttpResponse& response);
+    void onUpdateGroupResponse(ofxHttpResponse& response);
     
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);

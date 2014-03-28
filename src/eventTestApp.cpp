@@ -3,8 +3,10 @@
 
 
 
-int TEST_GROUP_ID = 109;
+int TEST_GROUP_ID = 107; //107, 109
 
+bool doListTest = false;
+bool doUpdateGroupTest = true;
 #define __func__ __PRETTY_FUNCTION__
 //--------------------------------------------------------------
 void eventTestApp::setup(){
@@ -34,6 +36,10 @@ void eventTestApp::onAPIConnect(LoginEventData& e)
     }
     
 }
+void eventTestApp::onUpdatedGroup(GroupEventData& e)
+{
+    ofRemoveListener(api.UPDATE_GROUP, this, &eventTestApp::onUpdatedGroup);
+}
 
 void eventTestApp::onGetGroup(GroupEventData& e)
 {
@@ -49,7 +55,18 @@ void eventTestApp::onGetGroup(GroupEventData& e)
         {
             Group& group    = e.groups[i];
             group.print();
-            listEventsForGroup(group.id);
+            if (doListTest)
+            {
+                listEventsForGroup(group);
+            }
+            if (doUpdateGroupTest)
+            {
+                group.title  = "updated title at "+ofGetTimestampString();
+                group.text  = "updated text at "+ofGetTimestampString();
+                ofAddListener(api.UPDATE_GROUP, this, &eventTestApp::onUpdatedGroup);
+                api.updateGroup(group);
+            }
+            //
             
         }
     }
@@ -58,11 +75,12 @@ void eventTestApp::onGetGroup(GroupEventData& e)
 
 
 
-void eventTestApp::listEventsForGroup(int groupId)
+void eventTestApp::listEventsForGroup(Group& group)
 {
 
     int testId = 5;
     
+    int groupId = group.id;
     ofLogVerbose(__func__) << "groupId: " << groupId;
     ofAddListener(api.LIST_EVENTS, this, &eventTestApp::onListEvents);
     switch (testId)

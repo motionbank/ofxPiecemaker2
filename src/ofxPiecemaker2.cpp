@@ -519,6 +519,29 @@ void ofxPiecemaker2::onListGroupsResponse(ofxHttpResponse& response)
 
 }
 
+void ofxPiecemaker2::onUpdateGroupResponse(ofxHttpResponse& response)
+{
+    
+    destroyAPIRequest(response, &ofxPiecemaker2::onUpdateGroupResponse);
+    ofLogVerbose(__func__) << printResponse(response);
+}
+
+void ofxPiecemaker2::updateGroup(Group& group)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onUpdateGroupResponse);
+    ofxHttpForm form;
+	form.action = url + "/group/" + ofToString(group.id);
+    form.addFormField( "id", ofToString(group.id) );
+    form.addFormField( "title", group.title );
+    form.addFormField( "text", group.text );
+    
+	form.method = OFX_HTTP_PUT;
+    
+    group.print();
+	httpUtils->addForm(form);
+}
+
+#pragma mark SYSTEM
 void ofxPiecemaker2::onGetSystemTimeResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onGetSystemTimeResponse);
