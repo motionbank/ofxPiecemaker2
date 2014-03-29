@@ -145,9 +145,10 @@ public:
     PiecemakerEvent()
     {
         id = -1;
+        event_group_id = -1;
         created_by_user_id = -1;
-        utc_timestamp = 0.0;
-        duration = 0.0;
+        utc_timestamp = -1;
+        duration = -1;
         type = "";
         
     }
@@ -158,6 +159,7 @@ public:
         Json::Value fieldArray = jsonValue["fields"];
         
         id = eventValue["id"].asInt();
+        event_group_id = eventValue["event_group_id"].asInt();
         utc_timestamp = (long)eventValue["utc_timestamp"].asDouble();
         created_by_user_id = eventValue["created_by_user_id"].asInt();
         type = eventValue["type"].asString();
@@ -184,6 +186,7 @@ public:
     {
         stringstream info;
         info << "id: "  << id     << "\n";
+        info << "event_group_id: "  << event_group_id     << "\n";
         info << "created_by_user_id: "  << created_by_user_id     << "\n";
         info << "utc_timestamp: "   << utc_timestamp      << "\n";
         info << "duration: "         << duration           << "\n";
@@ -197,6 +200,7 @@ public:
         return info.str();
     };
 	int id;
+    int event_group_id;
     int created_by_user_id;
 	long utc_timestamp;
 	float duration;
@@ -222,7 +226,7 @@ public:
 	LoginEventData()
 	{
         errorCode = -1;
-        errorReason = "UNDEFINED";
+        errorReason = "";
 		successful = false;
 	}
     bool wasSuccessful()
@@ -265,12 +269,12 @@ public:
     void listEvents(int groupId);
     void listEventsOfType(int groupId, string eventType);
     void listEventsWithFields(int groupId, vector<EventField> fields);
-    //void listEventsBetween(int groupId, Date from, Date to);
     void listEventsBetween(int groupId, long fromUTCTimestamp, long toUTCTimeStamp);
     void findEvents(int groupId, map<string, string> hashMap);
     void getEvent(int groupId, int eventId);
     void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
     void deleteEvent(int eventId);
+    void updateEvent(PiecemakerEvent& pieceMakerEvent);
     void getUser(int userId);
     void listUsers();
     
@@ -358,11 +362,13 @@ private:
     void onGetGroupResponse(ofxHttpResponse& response);
     void onDeleteGroupResponse(ofxHttpResponse& response);
     void onCreateGroupResponse(ofxHttpResponse& response);
+    void onUpdateGroupResponse(ofxHttpResponse& response);
     
     void onGetEventResponse(ofxHttpResponse& response);
     void onCreateEventResponse(ofxHttpResponse& response);
     void onDeleteEventResponse(ofxHttpResponse& response);
-    void onUpdateGroupResponse(ofxHttpResponse& response);
+    void onUpdateEventResponse(ofxHttpResponse& response);
+    
     
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsWithTypeResponse(ofxHttpResponse& response);

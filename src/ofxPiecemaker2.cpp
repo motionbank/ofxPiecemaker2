@@ -365,6 +365,47 @@ void ofxPiecemaker2::createEvent(int groupId, PiecemakerEvent& pieceMakerEvent)
 	httpUtils->addForm(form);
 }
 
+void ofxPiecemaker2::onUpdateEventResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onUpdateEventResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+    
+    //TODO Generic response type needed?
+
+}
+
+void ofxPiecemaker2::updateEvent(PiecemakerEvent& pieceMakerEvent)
+{
+    Poco::Timestamp pocoTimestamp;
+    pieceMakerEvent.utc_timestamp = (long)pocoTimestamp.utcTime();
+    
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onUpdateEventResponse);
+    ofxHttpForm form;
+	form.action = url + "/event/" + ofToString(pieceMakerEvent.id);
+	form.method = OFX_HTTP_PUT;
+    form.addFormField( "utc_timestamp", ofToString(pieceMakerEvent.utc_timestamp) );
+    if (pieceMakerEvent.duration != -1)
+    {
+        form.addFormField( "duration", ofToString(pieceMakerEvent.duration) );
+    }
+    
+    if (!pieceMakerEvent.type.empty())
+    {
+        form.addFormField( "type", pieceMakerEvent.type );
+    }
+    for(int i=0; i<pieceMakerEvent.fields.size(); i++)
+    {
+        EventField& field = pieceMakerEvent.fields[i];
+        
+        string formFieldKey = "fields["+field.id+"]";
+        
+        form.addFormField( formFieldKey, field.value );
+    }
+    
+	httpUtils->addForm(form);
+    
+}
 void ofxPiecemaker2::onDeleteEventResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onDeleteEventResponse);

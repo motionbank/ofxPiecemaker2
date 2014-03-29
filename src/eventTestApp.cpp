@@ -5,8 +5,8 @@
 
 int TEST_GROUP_ID = 107; //107, 109
 
-bool doListTest = false;
-bool doUpdateGroupTest = true;
+bool doListTest = true;
+bool doUpdateGroupTest = false;
 #define __func__ __PRETTY_FUNCTION__
 //--------------------------------------------------------------
 void eventTestApp::setup(){
@@ -78,7 +78,7 @@ void eventTestApp::onGetGroup(GroupEventData& e)
 void eventTestApp::listEventsForGroup(Group& group)
 {
 
-    int testId = 5;
+    int testId = 0;
     
     int groupId = group.id;
     ofLogVerbose(__func__) << "groupId: " << groupId;
@@ -214,6 +214,34 @@ void eventTestApp::draw(){
 
 }
 
+
+void eventTestApp::updateTestEvent()
+{
+    /*
+     event_group_id: 107
+     created_by_user_id: 3
+     utc_timestamp: -84654234
+     duration: 3000
+     type: test-type-OF
+     fields.size: 0
+     */
+    int testEventId = 3286;
+    PiecemakerEvent event;
+    event.id = testEventId;
+    event.type = "updated via updateTestEvent";
+    for(int i=0; i<5; i++)
+    {
+        EventField field;
+        field.id = "updated_id " + ofGetTimestampString();
+        field.value = "updated_value " + ofToString(ofGetElapsedTimeMicros());
+        event.fields.push_back(field);
+    }
+    
+    api.updateEvent(event);
+    
+    
+}
+
 //--------------------------------------------------------------
 void eventTestApp::keyPressed(int key){
    
@@ -224,6 +252,10 @@ void eventTestApp::keyPressed(int key){
     if (key == 'x')
     {
         //deleteListedEvents();
+    }
+    if(key == 'e')
+    {
+        updateTestEvent();
     }
 }
 
