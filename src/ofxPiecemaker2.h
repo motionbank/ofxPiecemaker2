@@ -274,6 +274,8 @@ public:
     void getEvent(int groupId, int eventId);
     void createEvent(int groupId, PiecemakerEvent& pieceMakerEvent);
     void deleteEvent(int eventId);
+    //TODO Overload?
+    //void updateEvent(int groupId, int eventId, HashMap eventData);
     void updateEvent(PiecemakerEvent& pieceMakerEvent);
     void getUser(int userId);
     void listUsers();
@@ -306,7 +308,9 @@ public:
 
     ofEvent< Poco::Timestamp> DATE_EVENT;
     
-    
+#define OFX_PIECEMAKER_VERSION 2
+    static string getVersion() { return ofToString(OFX_PIECEMAKER_VERSION); }
+    void printVersion() { ofLogNotice() << getVersion(); }
     
 #if 0
     static string getVersion();
@@ -333,7 +337,7 @@ public:
     //void findEvents(int groupId, HashMap opts);
    // void getEvent(int groupId, int eventId);
     //void createEvent(int groupId, HashMap eventData);
-    void updateEvent(int groupId, int eventId, HashMap eventData);
+   // void updateEvent(int groupId, int eventId, HashMap eventData);
     //void deleteEvent(int groupId, int eventId);
     //void getSystemTime();
 #endif
