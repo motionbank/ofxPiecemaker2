@@ -17,7 +17,7 @@ class userApp : public ofBaseApp{
         void logout();
         void getUser(int userID);
         void createUser();
-
+        void updateUser();
         void onGetUser(UserEventData& e);
         void onCreateUser(UserEventData& e);
 		void keyPressed(int key);

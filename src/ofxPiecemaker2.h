@@ -289,6 +289,7 @@ public:
     
     void getUser(int userId);
     void createUser(string userName, string userEmail, string userPassword, string userToken);
+    void updateUser(int userId, string userName="", string userEmail="", string userPassword="", string userToken="");
     void listUsers();
     
     void listGroups();
@@ -305,6 +306,7 @@ public:
     ofEvent<UserEventData>  GET_USER;
     ofEvent<UserEventData>  LIST_USERS;
     ofEvent<UserEventData>  CREATE_USER;
+    ofEvent<UserEventData>  UPDATE_USER;
     
     
     ofEvent<LoginEventData> LOGIN;
@@ -337,7 +339,7 @@ public:
     //void getUser(int userId);
     //void listUsers();
     
-    void createUser(string userName, string userEmail, string userPassword, string userToken);
+    //void createUser(string userName, string userEmail, string userPassword, string userToken);
     
     void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
     void deleteUser(int userId);
@@ -378,6 +380,7 @@ private:
     void onGetUserResponse(ofxHttpResponse& response);
     void onListUsersResponse(ofxHttpResponse& response);
     void onCreateUserResponse(ofxHttpResponse& response);
+    void onUpdateUserResponse(ofxHttpResponse& response);
     
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);

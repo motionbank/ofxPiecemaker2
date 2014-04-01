@@ -62,6 +62,13 @@ void userApp::createUser()
     api.createUser("Mr "+ofGetTimestampString(), ofGetTimestampString()+"@horses.org", ofGetTimestampString(), ofGetTimestampString());
 }
 
+
+void userApp::updateUser()
+{
+    int testUserID = 10;
+    
+    api.updateUser(testUserID, "userName_"+ofGetTimestampString(), "userEmail_"+ofGetTimestampString(), "updated_userPassword", "UPDATEDTOKENxYvE" );
+}
 //--------------------------------------------------------------
 void userApp::update(){
 
@@ -74,7 +81,7 @@ void userApp::draw(){
 
 //--------------------------------------------------------------
 void userApp::keyPressed(int key){
-    if (key == 'u')
+    if (key == 'g')
     {
         getUser(3);
         
@@ -82,6 +89,11 @@ void userApp::keyPressed(int key){
     if (key == 'c')
     {
         createUser();
+        
+    }
+    if (key == 'u')
+    {
+        updateUser();
         
     }
 }

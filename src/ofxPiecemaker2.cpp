@@ -152,6 +152,7 @@ void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
     
     eventData.createFromJSON(parser);
     eventData.print();
+    ofNotifyEvent(CREATE_USER, eventData);
 }
 void ofxPiecemaker2::createUser(string userName, string userEmail, string userPassword, string userToken)
 {
@@ -173,7 +174,40 @@ void ofxPiecemaker2::createUser(string userName, string userEmail, string userPa
     
   
 }
+void ofxPiecemaker2::onUpdateUserResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onUpdateUserResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+   
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    
+    UserEventData eventData;
+    
+    eventData.createFromJSON(parser);
+    eventData.print();
+    ofNotifyEvent(UPDATE_USER, eventData);
+}
 
+void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, string userPassword, string userToken)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onUpdateUserResponse);
+    
+    ofxHttpForm form;
+	form.action = url + "/user/"+ofToString(userId);
+	form.method = OFX_HTTP_PUT;
+    
+    if(!userName.empty()) form.addFormField( "name", userName );
+    if(!userEmail.empty()) form.addFormField( "email", userEmail );
+    if(!userPassword.empty()) form.addFormField( "password", userPassword );
+    if(!userToken.empty()) form.addFormField( "api_access_key", userToken );
+    
+    //form.addFormField( "is_super_admin", "false" );
+    //form.addFormField( "is_disabled", "false" );
+    
+	httpUtils->addForm(form);
+}
 #pragma mark EVENT METHODS
 void ofxPiecemaker2::onGetEventResponse(ofxHttpResponse& response)
 {
