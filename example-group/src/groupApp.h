@@ -5,7 +5,7 @@
 
 
 
-class testApp : public ofBaseApp{
+class groupApp : public ofBaseApp{
 	public:
 		void setup();
 		void update();
@@ -15,7 +15,6 @@ class testApp : public ofBaseApp{
         void onAPIConnect(LoginEventData& e);
     
         void logout();
-        void getUser(int userID);
     
         void onGetSystemTime(Poco::Timestamp& pocoTimestamp);
         void onAPIDisconnect(LoginEventData& e);
@@ -31,14 +30,6 @@ class testApp : public ofBaseApp{
         void deleteAllGroups();
     
 		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y);
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
-    
+		    
     vector<Group> groupsToDelete;
 };
