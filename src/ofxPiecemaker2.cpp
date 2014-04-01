@@ -140,11 +140,6 @@ void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateUserResponse);
     
     ofLogVerbose(__func__) << printResponse(response);
-    //TODO Generic response type needed?
-    /*
-     {"id":8,"name":"Mr. Horse","email":"mr@horses.org","password":"vXOMRi","api_access_key":null,"is_super_admin":false,"is_disabled":false}*/
-    
-    
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
     
@@ -203,6 +198,7 @@ void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, s
     if(!userPassword.empty()) form.addFormField( "password", userPassword );
     if(!userToken.empty()) form.addFormField( "api_access_key", userToken );
     
+    //TODO Ask about Java
     //form.addFormField( "is_super_admin", "false" );
     //form.addFormField( "is_disabled", "false" );
     

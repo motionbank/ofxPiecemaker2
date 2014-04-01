@@ -313,9 +313,7 @@ public:
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
     
-    ofEvent<GroupEventData> GROUP;
     ofEvent<GroupEventData> LIST_GROUPS;
-    
     ofEvent<GroupEventData> GET_GROUP;
     ofEvent<GroupEventData> CREATE_GROUP;
     ofEvent<GroupEventData> DELETE_GROUP;
@@ -330,36 +328,37 @@ public:
 #define OFX_PIECEMAKER_VERSION 2
     static string getVersion() { return ofToString(OFX_PIECEMAKER_VERSION); }
     void printVersion() { ofLogNotice() << getVersion(); }
-    
-#if 0
-    //static string getVersion();
-    //void printVersion();
-    //void login(string userEmail, string userPassword);
-    //void whoAmI();
-    //void logout();
-    //void getUser(int userId);
-    //void listUsers();
-    
-    //void createUser(string userName, string userEmail, string userPassword, string userToken);
-    
-    //void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
-    //void deleteUser(int userId);
-    //void listGroups();
-    //void getGroup(int groupId);
-    //void createGroup(string groupTitle, string groupText);
-    //void updateGroup(int groupId, HashMap groupData);
-    //void deleteGroup(int groupId);
-    //void listEvents(int groupId);
-    //void listEventsOfType(int groupId, string eventType);
-    //void listEventsWithFields(Object ... args);
-    //void listEventsBetween(int groupId, Date from, Date to);
-    //void findEvents(int groupId, HashMap opts);
-   // void getEvent(int groupId, int eventId);
-    //void createEvent(int groupId, HashMap eventData);
-   // void updateEvent(int groupId, int eventId, HashMap eventData);
-    //void deleteEvent(int groupId, int eventId);
-    //void getSystemTime();
-#endif
+
+//Java reference
+/*
+    static string getVersion();
+    void printVersion();
+    void login(string userEmail, string userPassword);
+    void whoAmI();
+    void logout();
+    void getUser(int userId);
+    void listUsers();
+
+    void createUser(string userName, string userEmail, string userPassword, string userToken);
+
+    void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
+    void deleteUser(int userId);
+    void listGroups();
+    void getGroup(int groupId);
+    void createGroup(string groupTitle, string groupText);
+    void updateGroup(int groupId, HashMap groupData);
+    void deleteGroup(int groupId);
+    void listEvents(int groupId);
+    void listEventsOfType(int groupId, string eventType);
+    void listEventsWithFields(Object ... args);
+    void listEventsBetween(int groupId, Date from, Date to);
+    void findEvents(int groupId, HashMap opts);
+    void getEvent(int groupId, int eventId);
+    void createEvent(int groupId, HashMap eventData);
+    void updateEvent(int groupId, int eventId, HashMap eventData);
+    void deleteEvent(int groupId, int eventId);
+    void getSystemTime();
+*/
     
 private:
     bool ensureApiKey();
