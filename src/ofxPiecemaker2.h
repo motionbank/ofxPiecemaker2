@@ -286,11 +286,12 @@ public:
     //void updateEvent(int groupId, int eventId, HashMap eventData);
     void updateEvent(PiecemakerEvent& pieceMakerEvent);
     
-    
+    void listUsers();
     void getUser(int userId);
     void createUser(string userName, string userEmail, string userPassword, string userToken);
     void updateUser(int userId, string userName="", string userEmail="", string userPassword="", string userToken="");
-    void listUsers();
+    
+    void deleteUser(int userId);
     
     void listGroups();
     void getGroup(int groupId);
@@ -341,8 +342,8 @@ public:
     
     //void createUser(string userName, string userEmail, string userPassword, string userToken);
     
-    void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
-    void deleteUser(int userId);
+    //void updateUser(int userId, string userName, string userEmail, string userPassword, string userToken);
+    //void deleteUser(int userId);
     //void listGroups();
     //void getGroup(int groupId);
     //void createGroup(string groupTitle, string groupText);
@@ -381,6 +382,7 @@ private:
     void onListUsersResponse(ofxHttpResponse& response);
     void onCreateUserResponse(ofxHttpResponse& response);
     void onUpdateUserResponse(ofxHttpResponse& response);
+    void onDeleteUserResponse(ofxHttpResponse& response);
     
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);

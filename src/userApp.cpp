@@ -96,4 +96,10 @@ void userApp::keyPressed(int key){
         updateUser();
         
     }
+    if (key == 'x')
+    {
+        //9-14
+        api.deleteUser(9);
+        
+    }
 }

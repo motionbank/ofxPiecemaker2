@@ -208,6 +208,25 @@ void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, s
     
 	httpUtils->addForm(form);
 }
+void ofxPiecemaker2::onDeleteUserResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onDeleteUserResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+
+}
+void ofxPiecemaker2::deleteUser(int userId)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onDeleteUserResponse);
+    
+    ofxHttpForm form;
+	form.action = url + "/user/" + ofToString(userId);
+	form.method = OFX_HTTP_DELETE;
+    
+	httpUtils->addForm(form);
+}
+
+
 #pragma mark EVENT METHODS
 void ofxPiecemaker2::onGetEventResponse(ofxHttpResponse& response)
 {
