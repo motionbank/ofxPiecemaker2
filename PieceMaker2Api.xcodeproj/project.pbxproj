@@ -14,6 +14,7 @@
 		0345B73D18D0F27F005233FA /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0345B73818D0F27F005233FA /* ofxJSONElement.cpp */; };
 		034E654318D0DB0100840D52 /* ofxHttpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 034E654118D0DB0100840D52 /* ofxHttpUtils.cpp */; };
 		03A8B70018CE71280028E9B1 /* ofxPiecemaker2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03A8B6FE18CE71280028E9B1 /* ofxPiecemaker2.cpp */; };
+		03EA172018E9E868009173DB /* userApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03EA171E18E9E868009173DB /* userApp.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -98,6 +99,8 @@
 		034E654D18D0DB6B00840D52 /* upload.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = upload.php; sourceTree = "<group>"; };
 		03A8B6FE18CE71280028E9B1 /* ofxPiecemaker2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPiecemaker2.cpp; sourceTree = "<group>"; };
 		03A8B6FF18CE71280028E9B1 /* ofxPiecemaker2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPiecemaker2.h; sourceTree = "<group>"; };
+		03EA171E18E9E868009173DB /* userApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = userApp.cpp; sourceTree = "<group>"; };
+		03EA171F18E9E868009173DB /* userApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userApp.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -357,6 +360,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				03EA171E18E9E868009173DB /* userApp.cpp */,
+				03EA171F18E9E868009173DB /* userApp.h */,
 				0302192818D79059007C2608 /* eventTestApp.cpp */,
 				0302192918D79059007C2608 /* eventTestApp.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
@@ -470,6 +475,7 @@
 				03A8B70018CE71280028E9B1 /* ofxPiecemaker2.cpp in Sources */,
 				0302192A18D79059007C2608 /* eventTestApp.cpp in Sources */,
 				0345B73D18D0F27F005233FA /* ofxJSONElement.cpp in Sources */,
+				03EA172018E9E868009173DB /* userApp.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				034E654318D0DB0100840D52 /* ofxHttpUtils.cpp in Sources */,
 				0345B73C18D0F27F005233FA /* json_writer.cpp in Sources */,

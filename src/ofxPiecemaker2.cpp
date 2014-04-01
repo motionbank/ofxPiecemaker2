@@ -135,6 +135,44 @@ void ofxPiecemaker2::getUser(int userId)
     
 	httpUtils->addForm(form);
 }
+void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
+{
+    destroyAPIRequest(response, &ofxPiecemaker2::onCreateUserResponse);
+    
+    ofLogVerbose(__func__) << printResponse(response);
+    //TODO Generic response type needed?
+    /*
+     {"id":8,"name":"Mr. Horse","email":"mr@horses.org","password":"vXOMRi","api_access_key":null,"is_super_admin":false,"is_disabled":false}*/
+    
+    
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    
+    UserEventData eventData;
+    
+    eventData.createFromJSON(parser);
+    eventData.print();
+}
+void ofxPiecemaker2::createUser(string userName, string userEmail, string userPassword, string userToken)
+{
+    ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onCreateUserResponse);
+    
+    ofxHttpForm form;
+	form.action = url + "/user";
+	form.method = OFX_HTTP_POST;
+    
+    form.addFormField( "name", userName );
+    form.addFormField( "email", userEmail );
+    
+    form.addFormField( "password", userPassword );
+    form.addFormField( "api_access_key", userToken );
+    form.addFormField( "is_super_admin", "false" );
+    form.addFormField( "is_disabled", "false" );
+    
+	httpUtils->addForm(form);
+    
+  
+}
 
 #pragma mark EVENT METHODS
 void ofxPiecemaker2::onGetEventResponse(ofxHttpResponse& response)

@@ -60,7 +60,13 @@ class UserEventData
 public:
     UserEventData()
     {
-    
+        id = -1;
+        name = "";
+        password = "";
+        api_access_key = "";
+        is_super_admin = false;
+        is_disabled = false;
+        
     };
     
     void createFromJSON(Json::Value jsonvalue)
@@ -68,6 +74,7 @@ public:
         id = jsonvalue["id"].asInt();
         name = jsonvalue["name"].asString();
         email = jsonvalue["email"].asString();
+        password = jsonvalue["password"].asString();
         api_access_key = jsonvalue["api_access_key"].asString();
         is_super_admin = jsonvalue["is_super_admin"].asBool();
         is_disabled = jsonvalue["is_disabled"].asBool();
@@ -266,6 +273,7 @@ public:
     void login(string userEmail, string userPassword);
     void whoAmI();
     void logout();
+    
     void listEvents(int groupId);
     void listEventsOfType(int groupId, string eventType);
     void listEventsWithFields(int groupId, vector<EventField> fields);
@@ -277,13 +285,18 @@ public:
     //TODO Overload?
     //void updateEvent(int groupId, int eventId, HashMap eventData);
     void updateEvent(PiecemakerEvent& pieceMakerEvent);
+    
+    
     void getUser(int userId);
+    void createUser(string userName, string userEmail, string userPassword, string userToken);
     void listUsers();
     
     void listGroups();
     void getGroup(int groupId);
     void deleteGroup(int groupId);
     void createGroup(string groupTitle = "", string groupText = "");
+    //TODO Overload?
+    // void updateGroup(int groupId, HashMap groupData);
     void updateGroup(Group& group);
     void getSystemTime();
     string url;
@@ -291,6 +304,9 @@ public:
     
     ofEvent<UserEventData>  GET_USER;
     ofEvent<UserEventData>  LIST_USERS;
+    ofEvent<UserEventData>  CREATE_USER;
+    
+    
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
     
@@ -313,8 +329,8 @@ public:
     void printVersion() { ofLogNotice() << getVersion(); }
     
 #if 0
-    static string getVersion();
-    void printVersion();
+    //static string getVersion();
+    //void printVersion();
     //void login(string userEmail, string userPassword);
     //void whoAmI();
     //void logout();
@@ -328,7 +344,7 @@ public:
     //void listGroups();
     //void getGroup(int groupId);
     //void createGroup(string groupTitle, string groupText);
-    void updateGroup(int groupId, HashMap groupData);
+    //void updateGroup(int groupId, HashMap groupData);
     //void deleteGroup(int groupId);
     //void listEvents(int groupId);
     //void listEventsOfType(int groupId, string eventType);
@@ -361,6 +377,7 @@ private:
     
     void onGetUserResponse(ofxHttpResponse& response);
     void onListUsersResponse(ofxHttpResponse& response);
+    void onCreateUserResponse(ofxHttpResponse& response);
     
     void onListGroupsResponse(ofxHttpResponse& response);
     void onGetGroupResponse(ofxHttpResponse& response);
