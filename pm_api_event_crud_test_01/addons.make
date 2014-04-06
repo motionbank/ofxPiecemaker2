@@ -1,3 +1,0 @@
-ofxHttpUtils
-ofxJSON
-ofxPiecemaker2
