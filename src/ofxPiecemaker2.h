@@ -15,6 +15,8 @@ public:
         id = -1;
         title = "";
         text = "";
+        created_by_user_id = -1;
+        created_at = "";
     }
     string print()
     {
@@ -55,10 +57,12 @@ public:
     
 };
 
-class UserEventData
+
+
+class User
 {
 public:
-    UserEventData()
+    User()
     {
         id = -1;
         name = "";
@@ -101,6 +105,17 @@ public:
     bool is_super_admin;
     bool is_disabled;
 
+};
+
+class UserEventData
+{
+public:
+    UserEventData()
+    {
+        
+    }
+    vector<User> users;
+    
 };
 
 
@@ -288,6 +303,7 @@ public:
     
     void listUsers();
     void getUser(int userId);
+    void updateUser(User& user);
     void createUser(string userName, string userEmail, string userPassword, string userToken);
     void updateUser(int userId, string userName="", string userEmail="", string userPassword="", string userToken="");
     
@@ -308,6 +324,7 @@ public:
     ofEvent<UserEventData>  LIST_USERS;
     ofEvent<UserEventData>  CREATE_USER;
     ofEvent<UserEventData>  UPDATE_USER;
+    ofEvent<UserEventData>  DELETE_USER;
     
     
     ofEvent<LoginEventData> LOGIN;
@@ -320,8 +337,14 @@ public:
     ofEvent<GroupEventData> UPDATE_GROUP;
     
     ofEvent<PiecemakerEventData> LIST_EVENTS;
+    ofEvent<PiecemakerEventData> LIST_EVENTS_BETWEEN;
+    ofEvent<PiecemakerEventData> LIST_EVENTS_OF_TYPE;
+    ofEvent<PiecemakerEventData> LIST_EVENTS_WITH_FIELDS;
+
+    
     ofEvent<PiecemakerEventData> CREATE_EVENT;
     ofEvent<PiecemakerEventData> DELETE_EVENT;
+    ofEvent<PiecemakerEventData> GET_EVENT;
 
     ofEvent< Poco::Timestamp> DATE_EVENT;
     
@@ -396,7 +419,7 @@ private:
     
     
     void onListEventsResponse(ofxHttpResponse& response);
-    void onListEventsWithTypeResponse(ofxHttpResponse& response);
+    void onListEventsOfTypeResponse(ofxHttpResponse& response);
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
     void onListEventsBetweenResponse(ofxHttpResponse& response);
     void onFindEventsResponse(ofxHttpResponse& response);
