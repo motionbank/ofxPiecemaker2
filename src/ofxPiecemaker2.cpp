@@ -98,6 +98,32 @@ void ofxPiecemaker2::onListUsersResponse(ofxHttpResponse& response)
 {
     
     destroyAPIRequest(response, &ofxPiecemaker2::onListUsersResponse);
+    //ofLogVerbose(__func__) << printResponse(response);
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    UserEventData eventData;
+    if(parser.isArray())
+    {
+        ofLogVerbose(__func__) << "parser isArray(): " << parser.isArray() << " size " << parser.size();
+        for(int i= 0; i<parser.size(); i++)
+        {
+            User user;
+            user.createFromJSON(parser[i]);
+            eventData.users.push_back(user);
+        }
+    }else
+    {
+        if (parser.isObject())
+        {
+            ofLogVerbose(__func__) << "isObject()!";
+        }
+    }
+    
+    //
+    //eventData.createFromJSON(parser);
+   // ofLogVerbose(__func__) << eventData.print();
+    ofNotifyEvent(LIST_USERS, eventData);
+    
 }
 
 void ofxPiecemaker2::listUsers()
@@ -120,8 +146,11 @@ void ofxPiecemaker2::onGetUserResponse(ofxHttpResponse& response)
     ofxJSONElement parser;
     parser.parse(ofToString(response.responseBody));
     UserEventData eventData;
-    eventData.createFromJSON(parser);
-    ofLogVerbose(__func__) << eventData.print();
+    User user;
+    
+    user.createFromJSON(parser);
+    ofLogVerbose(__func__) << user.print();
+    eventData.users.push_back(user);
     ofNotifyEvent(GET_USER, eventData);
 }
 
@@ -144,9 +173,11 @@ void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
     parser.parse(ofToString(response.responseBody));
     
     UserEventData eventData;
+    User user;
     
-    eventData.createFromJSON(parser);
-    eventData.print();
+    user.createFromJSON(parser);
+    ofLogVerbose(__func__) << user.print();
+    eventData.users.push_back(user);
     ofNotifyEvent(CREATE_USER, eventData);
 }
 void ofxPiecemaker2::createUser(string userName, string userEmail, string userPassword, string userToken)
@@ -179,12 +210,18 @@ void ofxPiecemaker2::onUpdateUserResponse(ofxHttpResponse& response)
     parser.parse(ofToString(response.responseBody));
     
     UserEventData eventData;
+    User user;
     
-    eventData.createFromJSON(parser);
-    eventData.print();
+    user.createFromJSON(parser);
+    ofLogVerbose(__func__) << user.print();
+    eventData.users.push_back(user);
     ofNotifyEvent(UPDATE_USER, eventData);
 }
 
+void ofxPiecemaker2::updateUser(User& user)
+{
+    updateUser(user.id, user.name, user.email, user.password, user.api_access_key);
+}
 void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, string userPassword, string userToken)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onUpdateUserResponse);
@@ -209,7 +246,16 @@ void ofxPiecemaker2::onDeleteUserResponse(ofxHttpResponse& response)
     destroyAPIRequest(response, &ofxPiecemaker2::onDeleteUserResponse);
     
     ofLogVerbose(__func__) << printResponse(response);
-
+    
+    ofxJSONElement parser;
+    parser.parse(ofToString(response.responseBody));
+    UserEventData eventData;
+    User user;
+    
+    user.createFromJSON(parser);
+    ofLogVerbose(__func__) << user.print();
+    eventData.users.push_back(user);
+    ofNotifyEvent(DELETE_USER, eventData);
 }
 void ofxPiecemaker2::deleteUser(int userId)
 {

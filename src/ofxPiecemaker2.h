@@ -57,10 +57,12 @@ public:
     
 };
 
-class UserEventData
+
+
+class User
 {
 public:
-    UserEventData()
+    User()
     {
         id = -1;
         name = "";
@@ -103,6 +105,17 @@ public:
     bool is_super_admin;
     bool is_disabled;
 
+};
+
+class UserEventData
+{
+public:
+    UserEventData()
+    {
+        
+    }
+    vector<User> users;
+    
 };
 
 
@@ -290,6 +303,7 @@ public:
     
     void listUsers();
     void getUser(int userId);
+    void updateUser(User& user);
     void createUser(string userName, string userEmail, string userPassword, string userToken);
     void updateUser(int userId, string userName="", string userEmail="", string userPassword="", string userToken="");
     
@@ -310,6 +324,7 @@ public:
     ofEvent<UserEventData>  LIST_USERS;
     ofEvent<UserEventData>  CREATE_USER;
     ofEvent<UserEventData>  UPDATE_USER;
+    ofEvent<UserEventData>  DELETE_USER;
     
     
     ofEvent<LoginEventData> LOGIN;
