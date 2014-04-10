@@ -394,7 +394,8 @@ void ofxPiecemaker2::findEvents(int groupId, map<string, string> hashMap)
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onFindEventsResponse);
     ofxHttpForm form;
 	form.action = url + "/group/" + ofToString(groupId) + "/events";
-    typename map<string, string>::iterator it = hashMap.begin();
+    
+	auto map<string, string>::iterator it = hashMap.begin();
     while (it != hashMap.end())
     {
         form.addFormField( (*it).first, (*it).second );

@@ -133,7 +133,7 @@ public:
     string id;
     string value;
     
-    void trimEnd(string& inputString)
+    string trimEnd(string& inputString)
     {
         inputString.erase(inputString.find_last_not_of(" \n\r\t")+1);
         return inputString;

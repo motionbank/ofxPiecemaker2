@@ -83,6 +83,11 @@ void ofApp::onGroupDeleted(GroupEventData& e)
         }
     }
     ofLogVerbose() << "groupsToDelete size: " << groupsToDelete.size();
+	
+	if ( groupsToDelete.size() == 0 )
+	{
+		ofLogVerbose() << "All groups deleted, done!";
+	}
 }
 //--------------------------------------------------------------
 void ofApp::update(){
