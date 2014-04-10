@@ -54,6 +54,7 @@ void ofxPiecemaker2::login(string userEmail, string userPassword)
     
 
 }
+
 void ofxPiecemaker2::onLogoutResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onLogoutResponse);
@@ -80,6 +81,7 @@ void ofxPiecemaker2::onWhoAmIResponse(ofxHttpResponse& response)
 
     
 }
+
 void ofxPiecemaker2::whoAmI()
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onWhoAmIResponse);
@@ -92,7 +94,6 @@ void ofxPiecemaker2::whoAmI()
 }
 
 #pragma mark USER METHODS
-
 
 void ofxPiecemaker2::onListUsersResponse(ofxHttpResponse& response)
 {
@@ -164,6 +165,7 @@ void ofxPiecemaker2::getUser(int userId)
     
 	httpUtils->addForm(form);
 }
+
 void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateUserResponse);
@@ -180,6 +182,7 @@ void ofxPiecemaker2::onCreateUserResponse(ofxHttpResponse& response)
     eventData.users.push_back(user);
     ofNotifyEvent(CREATE_USER, eventData);
 }
+
 void ofxPiecemaker2::createUser(string userName, string userEmail, string userPassword, string userToken)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onCreateUserResponse);
@@ -197,9 +200,8 @@ void ofxPiecemaker2::createUser(string userName, string userEmail, string userPa
     form.addFormField( "is_disabled", "false" );
     
 	httpUtils->addForm(form);
-    
-  
 }
+
 void ofxPiecemaker2::onUpdateUserResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onUpdateUserResponse);
@@ -222,6 +224,7 @@ void ofxPiecemaker2::updateUser(User& user)
 {
     updateUser(user.id, user.name, user.email, user.password, user.api_access_key);
 }
+
 void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, string userPassword, string userToken)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onUpdateUserResponse);
@@ -241,6 +244,7 @@ void ofxPiecemaker2::updateUser(int userId, string userName, string userEmail, s
     
 	httpUtils->addForm(form);
 }
+
 void ofxPiecemaker2::onDeleteUserResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onDeleteUserResponse);
@@ -257,6 +261,7 @@ void ofxPiecemaker2::onDeleteUserResponse(ofxHttpResponse& response)
     eventData.users.push_back(user);
     ofNotifyEvent(DELETE_USER, eventData);
 }
+
 void ofxPiecemaker2::deleteUser(int userId)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onDeleteUserResponse);
@@ -268,8 +273,8 @@ void ofxPiecemaker2::deleteUser(int userId)
 	httpUtils->addForm(form);
 }
 
-
 #pragma mark EVENT METHODS
+
 void ofxPiecemaker2::onGetEventResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onGetEventResponse);
@@ -316,8 +321,8 @@ PiecemakerEventData ofxPiecemaker2::createEventDataFromResponse(ofxHttpResponse&
     
     eventData.events = events;
     return eventData;
-
 }
+
 void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onListEventsResponse);
@@ -334,7 +339,6 @@ void ofxPiecemaker2::onListEventsResponse(ofxHttpResponse& response)
     ofNotifyEvent(LIST_EVENTS, eventData);
     
 }
-
 
 void ofxPiecemaker2::listEvents(int groupId)
 {
@@ -363,6 +367,7 @@ void ofxPiecemaker2::onListEventsOfTypeResponse(ofxHttpResponse& response)
     ofNotifyEvent(LIST_EVENTS_OF_TYPE, eventData);
     
 }
+
 void ofxPiecemaker2::listEventsOfType(int groupId, string eventType)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsOfTypeResponse);
@@ -395,7 +400,7 @@ void ofxPiecemaker2::findEvents(int groupId, map<string, string> hashMap)
     ofxHttpForm form;
 	form.action = url + "/group/" + ofToString(groupId) + "/events";
     
-	auto map<string, string>::iterator it = hashMap.begin();
+	map<string, string>::iterator it = hashMap.begin();
     while (it != hashMap.end())
     {
         form.addFormField( (*it).first, (*it).second );
@@ -447,6 +452,7 @@ void ofxPiecemaker2::listEventsWithFields(int groupId, vector<EventField>fields)
     
 	httpUtils->addForm(form);
 }
+
 void ofxPiecemaker2::onListEventsBetweenResponse(ofxHttpResponse& response)
 {
      destroyAPIRequest(response, &ofxPiecemaker2::onListEventsBetweenResponse);
@@ -461,6 +467,7 @@ void ofxPiecemaker2::onListEventsBetweenResponse(ofxHttpResponse& response)
     ofNotifyEvent(LIST_EVENTS_BETWEEN, eventData);
     
 }
+
 void ofxPiecemaker2::listEventsBetween(int groupId, long fromUTCTimestamp, long toUTCTimeStamp)
 {
     ofxHttpUtils* httpUtils = createAPIRequest(&ofxPiecemaker2::onListEventsBetweenResponse);
@@ -575,6 +582,7 @@ void ofxPiecemaker2::updateEvent(PiecemakerEvent& pieceMakerEvent)
 	httpUtils->addForm(form);
     
 }
+
 void ofxPiecemaker2::onDeleteEventResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onDeleteEventResponse);
@@ -599,6 +607,7 @@ void ofxPiecemaker2::deleteEvent(int eventId)
 }
 
 #pragma mark GROUP METHODS
+
 void ofxPiecemaker2::onCreateGroupResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onCreateGroupResponse);
@@ -628,6 +637,7 @@ void ofxPiecemaker2::createGroup(string title, string text)
 	httpUtils->addForm(form);
     
 }
+
 void ofxPiecemaker2::onDeleteGroupResponse(ofxHttpResponse& response)
 {
    
@@ -717,6 +727,7 @@ void ofxPiecemaker2::deleteGroup(int groupId)
 	httpUtils->addForm(form);
 
 }
+
 void ofxPiecemaker2::getGroup(int groupId)
 {
     //ofLogVerbose(__func__) << "groupId: " << groupId;
@@ -792,6 +803,7 @@ void ofxPiecemaker2::updateGroup(Group& group)
 }
 
 #pragma mark SYSTEM
+
 void ofxPiecemaker2::onGetSystemTimeResponse(ofxHttpResponse& response)
 {
     destroyAPIRequest(response, &ofxPiecemaker2::onGetSystemTimeResponse);

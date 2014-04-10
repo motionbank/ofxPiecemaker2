@@ -133,10 +133,9 @@ public:
     string id;
     string value;
     
-    string trimEnd(string& inputString)
+    void trimEnd(string& inputString)
     {
         inputString.erase(inputString.find_last_not_of(" \n\r\t")+1);
-        return inputString;
     };
     
     void createFromJSON(Json::Value jsonvalue)
@@ -148,6 +147,7 @@ public:
         trimEnd(event_id);
         trimEnd(value);
     };
+	
     string print()
     {
         stringstream info;
@@ -174,6 +174,7 @@ public:
         type = "";
         
     }
+	
     void createFromJSON(Json::Value& jsonValue)
     {
         
@@ -251,10 +252,12 @@ public:
         errorReason = "";
 		successful = false;
 	}
+	
     bool wasSuccessful()
     {
         return successful;
     }
+	
     void setResponse(ofxHttpResponse response_)
     {
         this->response = response_;
@@ -274,11 +277,6 @@ private:
 	ofxHttpResponse response;
     bool successful;
 };
-
-
-
-
-
 
 class ofxPiecemaker2
 {
@@ -325,7 +323,6 @@ public:
     ofEvent<UserEventData>  CREATE_USER;
     ofEvent<UserEventData>  UPDATE_USER;
     ofEvent<UserEventData>  DELETE_USER;
-    
     
     ofEvent<LoginEventData> LOGIN;
     ofEvent<LoginEventData> LOGOUT;
@@ -394,8 +391,6 @@ private:
     
     string printResponse(ofxHttpResponse response, bool skipBody = false);
     
-    
-   
     void onLoginResponse(ofxHttpResponse& response);
     void onLogoutResponse(ofxHttpResponse& response);
     void onWhoAmIResponse(ofxHttpResponse& response);
@@ -417,17 +412,13 @@ private:
     void onDeleteEventResponse(ofxHttpResponse& response);
     void onUpdateEventResponse(ofxHttpResponse& response);
     
-    
     void onListEventsResponse(ofxHttpResponse& response);
     void onListEventsOfTypeResponse(ofxHttpResponse& response);
     void onListEventsWithFieldsResponse(ofxHttpResponse& response);
     void onListEventsBetweenResponse(ofxHttpResponse& response);
     void onFindEventsResponse(ofxHttpResponse& response);
     
-
-    
     void onGetSystemTimeResponse(ofxHttpResponse& response);
     
     PiecemakerEventData createEventDataFromResponse(ofxHttpResponse& response);
-
 };
